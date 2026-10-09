@@ -6,6 +6,7 @@
  */
 
 import { SITE } from '@/data/site';
+import { withBase } from '@/utils/links';
 
 export type JsonLd = Record<string, unknown>;
 
@@ -17,7 +18,7 @@ export function buildPageTitle(title: string, includeSuffix = true): string {
 /** URL canónica absoluta a partir de una ruta interna. */
 export function buildCanonicalURL(path: string): string {
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return new URL(clean, SITE.url).toString();
+  return new URL(withBase(clean), SITE.url).toString();
 }
 
 /** Schema.org: Organización. */

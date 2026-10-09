@@ -3,6 +3,7 @@ import { AtSign, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/astro
 import { SITE } from '@/data/site';
 import { SERVICES } from '@/data/services';
 import { generateWhatsAppLink } from '@/utils/whatsapp';
+import { withBase } from '@/utils/links';
 
 const year = new Date().getFullYear();
 const whatsappHref = generateWhatsAppLink();
@@ -12,7 +13,7 @@ const whatsappHref = generateWhatsAppLink();
   <div class="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 md:py-16 lg:grid-cols-12 lg:px-8">
     <section class="lg:col-span-5">
       <a
-        href="/"
+        href={withBase('/')}
         class="inline-flex items-center gap-2.5"
         aria-label={`Ir al inicio — ${SITE.brandLabel}`}
       >
@@ -36,7 +37,7 @@ const whatsappHref = generateWhatsAppLink();
         {SERVICES.map((service) => (
           <li>
             <a
-              href={`/servicios#${service.slug}`}
+              href={withBase(`/servicios#${service.slug}`)}
               class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
             >
               {service.name}
@@ -52,7 +53,7 @@ const whatsappHref = generateWhatsAppLink();
         {SITE.navigation.map((link) => (
           <li>
             <a
-              href={link.href}
+              href={withBase(link.href)}
               class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
             >
               {link.label}

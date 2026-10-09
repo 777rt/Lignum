@@ -127,7 +127,7 @@ Verificadas en build (`dist/`, 7 páginas):
 | ------------ | ----------------------------- | ----------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `/`          | `pages/index.astro`           | Portada                       | Hero, ServicesPreview, FeaturedWork, AboutPreview, Testimonials, FinalCTA | JSON-LD: Organization + WebSite + LocalBusiness                                             |
 | `/servicios` | `pages/servicios/index.astro` | Índice editorial de servicios | ServiceGrid, FinalCTA, Container                                          | **Selector con hash `#slug`** (ver §11); JSON-LD: Organization + LocalBusiness + Breadcrumb |
-| `/trabajos`  | `pages/trabajos.astro`        | Galería de proyectos          | Gallery (6 fotos), VideoGallery (2 videos), FinalCTA                      | Video en loop silenciado, autoreproducción por scroll                    |
+| `/trabajos`  | `pages/trabajos.astro`        | Galería de proyectos          | Gallery (6 fotos), VideoGallery (2 videos), FinalCTA                      | Video en loop silenciado, autoreproducción por scroll                                       |
 | `/nosotros`  | `pages/nosotros.astro`        | Sobre la empresa              | FinalCTA + imagen real 21/9 (móvil 16/10)                                 | Copy placeholder; foto de trabajo real                                                      |
 | `/contacto`  | `pages/contacto.astro`        | Contacto + cotización         | QuoteForm, botones WhatsApp/tel/email                                     | Columna sticky `lg:top-28`; canales desde `SITE`                                            |
 | `/blog`      | `pages/blog/index.astro`      | Stub de blog                  | FinalCTA + image-slot                                                     | "Se implementará en etapa posterior"                                                        |
@@ -457,6 +457,13 @@ Tres piezas en `ServiceGrid.astro`, en este orden exacto de ejecución:
 | `5.47.57 PM (5).jpeg`  | 960×1280  | `/trabajos` — portrait 3/4            | Sendero de placas de hormigón entre el jardín y el portón de madera                |
 | `5.47.57 PM (11).jpeg` | 1280×960  | `/trabajos` — wide 21/9               | Área verde con césped cortado junto a un muro blanco y un cerco metálico           |
 
+> **En curso (cambios del cliente, 8/10 tarde):** `services.ts` se reescribió fuera de esta ronda:
+> foto de jardinería → `9.41.51 PM.jpeg` (720×1280, pero el `imageAlt` de `Desmalezado` sigue
+> describiendo la foto anterior), `imgJardines` → `4.43.00 PM (2).jpeg` (queda duplicada con
+> `/trabajos`; `4.43.01 PM (1).jpeg` quedó sin uso) y servicios renombrados (`Desmalezado`,
+> `Tala-de-árboles`), por lo que las tablas de slugs de §Servicios están desactualizadas. Copias de
+> Hero/About/FinalCTA/ServicesPreview también reescritas con textos reales.
+
 **Descartadas: 17 fotos** de las 31 — repetitivas (mismo patio en varias tomas con/sin flare), mediocres
 (manguera enredada, césped parcheado con mascota, neumáticos, maleza "antes", juguetes) o sin relación
 con la sección (no hay foto de riego automático → `FeaturedWork` queda en placeholder). Crops
@@ -466,10 +473,13 @@ Verificado: 0 duplicados (dHash par a par 23–39 de 64 bits); build emite los a
 
 **Reparto de video (2 de 5 archivos usados):**
 
-| Original (WhatsApp) | Duración · peso | Copia usada (sin audio)            | Ubicación            | Razón de selección                                                           |
-| ------------------- | --------------- | ---------------------------------- | -------------------- | ---------------------------------------------------------------------------- |
-| `5.58.45 PM.mp4`    | 20 s · 7,2 MB   | `poda-palmera.mp4` (7,4 MB)        | `/trabajos` — Videos | Plano estable, palmera centrada y podador arborizado visible: mejor del lote |
-| `5.58.40 PM.mp4`    | 70 s · 21,4 MB  | `poda-tronco-ladera.mp4` (21,9 MB) | `/trabajos` — Videos | Trabajo real con motosierra, polvo y vista de ciudad: credibilidad de poda   |
+| Original (WhatsApp) | Duración · peso | Copia usada (sin audio)            | Ubicación            | Razón de selección                                                         |
+| ------------------- | --------------- | ---------------------------------- | -------------------- | -------------------------------------------------------------------------- |
+| `5.58.45 PM.mp4`    | 20 s · 7,2 MB   | `poda-palmera.mp4` (19 s · 3,7 MB) | `/trabajos` — Videos | POV del podador en lo alto: motosierra sobre el tronco de la palmera       |
+| `5.58.40 PM.mp4`    | 70 s · 21,4 MB  | `poda-tronco-ladera.mp4` (21,9 MB) | `/trabajos` — Videos | Trabajo real con motosierra, polvo y vista de ciudad: credibilidad de poda |
+
+`poda-palmera.mp4` fue re-codificada por el cliente (832×464 · 60 fps) el 8/10 por la noche; se le volvió
+a eliminar la pista de audio (`-an`, 0 streams verificados) y se regeneró su póster desde ese archivo.
 
 **Descartados: 3 videos** — `5.58.40 PM (1)` (6,5 s · ladera con tronco caído, sin trabajador ni plano
 interesante), `5.58.41 PM` (30 s · cámara brusca, contenido ambiguo: redes/limpieza) y `5.58.42 PM`
@@ -480,11 +490,12 @@ el mismo tema). Hero y `FeaturedWork` mantienen foto: el video no mejoraba lo su
 **Garantía de audio:** las copias se generaron con `ffmpeg -c:v copy -an` (**0 streams de audio**, verificado
 sobre los archivos emitidos en `dist/`) y el componente añade `muted`: no existe ningún control ni pista
 que permita sonido. **Reproducción:** el video es el elemento visual (sin botón Play ni overlay): `muted`
-+ `loop` + `playsinline` en el propio `<video>`, `preload="none"` para no descargar los mp4 al abrir la
-página, y arranque/pausa según visibilidad con IntersectionObserver (`play()` al entrar, `pause()` al
-salir, reanuda sin reiniciar; loop nativo). El póster JPG queda solo como respaldo de carga. Con
-`prefers-reduced-motion` no se reproduce solo y se habilitan los controles nativos como alternativa
-manual.
+
+- `loop` + `playsinline` en el propio `<video>`, `preload="none"` para no descargar los mp4 al abrir la
+  página, y arranque/pausa según visibilidad con IntersectionObserver (`play()` al entrar, `pause()` al
+  salir, reanuda sin reiniciar; loop nativo). El póster JPG queda solo como respaldo de carga. Con
+  `prefers-reduced-motion` no se reproduce solo y se habilitan los controles nativos como alternativa
+  manual.
 
 **Arquitectura preparada para fotos reales (ya funciona):**
 
@@ -746,7 +757,15 @@ npm run format      # formatea
 npm run lint        # eslint, falla con cualquier warning
 npm run check       # astro check (tipos)
 npm run build       # build estático
-# smoke manual: astro dev --background → http://localhost:4321
+# smoke manual: astro dev --background → http://localhost:4321/Lignum/
 ```
 
 **Preparado para contenido futuro (no hay que construir esto desde cero):** slots de fotos (`.image-slot`, `Service.image`, `GalleryItem.src`), dark-mode tokens (`.dark`), export `getServiceBySlug()` + `MAIN_SERVICES`, página `/blog` (stub), campos `image`/`imageAlt` y `status` en servicios, JSON-LD builders en `seo.ts`.
+
+## 23. 🚀 Despliegue (GitHub Pages)
+
+- **Workflow**: `.github/workflows/deploy.yml` — push a `main` (o `workflow_dispatch`) → `npm ci` → `npm run build` con `SITE_URL=https://777rt.github.io` y `BASE_PATH=/Lignum` → `actions/configure-pages@v5` + `upload-pages-artifact@v3` (`dist/`) → `deploy-pages@v4`. **Requisito manual una vez**: repo → Settings → Pages → Source: **GitHub Actions**.
+- **Base path**: `astro.config.ts` → `site: SITE.url` (`SITE_URL` lo inyecta CI; local usa el PLACEHOLDER) y `base: process.env.BASE_PATH ?? '/Lignum'`. En un dominio propio, cambiar `SITE_URL`/`BASE_PATH` en el workflow (o el default de `base`).
+- **Enlaces internos**: usar `withBase('/ruta')` de `src/utils/links.ts` (lo aplica solo `<Button>`; los enlaces crudos usan `withBase` explícito — Navbar, Footer, favicon). `isCurrentPath()` resuelve `aria-current` ignorando el base. Canonicals/JSON-LD: `buildCanonicalURL()` en `seo.ts` (aplica `withBase`).
+- **SEO bajo base**: `public/robots.txt` → `src/pages/robots.txt.ts` (sitemap absoluto con la base activa); `@astrojs/sitemap` usa `site` real; `public/.nojekyll` evita que Pages descarte `_astro/`.
+- **Local**: el base aplica también en dev → `http://localhost:4321/Lignum/`.

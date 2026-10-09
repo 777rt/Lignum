@@ -3,6 +3,7 @@ import { Menu, X } from '@lucide/astro';
 import Button from '@/components/ui/Button.astro';
 import { SITE } from '@/data/site';
 import { generateWhatsAppLink } from '@/utils/whatsapp';
+import { isCurrentPath, withBase } from '@/utils/links';
 
 const { pathname } = Astro.url;
 const whatsappHref = generateWhatsAppLink();
@@ -47,7 +48,7 @@ const whatsappHref = generateWhatsAppLink();
     class="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-6 px-4 sm:px-6 lg:h-[72px] lg:px-8"
   >
     <a
-      href="/"
+      href={withBase('/')}
       data-brand
       class="flex shrink-0 items-center gap-2.5"
       aria-label={`Ir al inicio — ${SITE.brandLabel}`}
@@ -67,11 +68,11 @@ const whatsappHref = generateWhatsAppLink();
 
     <ul class="hidden items-center gap-1 lg:flex">
       {SITE.navigation.map((link) => {
-        const isCurrent = pathname === link.href;
+        const isCurrent = isCurrentPath(pathname, link.href);
         return (
           <li>
             <a
-              href={link.href}
+              href={withBase(link.href)}
               data-nav-link
               aria-current={isCurrent ? 'page' : undefined}
               class="px-3 py-2 text-sm font-medium leading-tight"
@@ -109,7 +110,7 @@ const whatsappHref = generateWhatsAppLink();
         {SITE.navigation.map((link, index) => (
           <li class="border-b border-stone-200/70 last:border-b-0">
             <a
-              href={link.href}
+              href={withBase(link.href)}
               data-menu-link
               class="flex items-baseline gap-4 py-3.5 font-display text-lg font-medium text-stone-900"
             >

@@ -1,5 +1,0 @@
-# PLACEHOLDER: reemplazar el dominio por el real (debe coincidir con src/data/site.ts)
-User-agent: *
-Allow: /
-
-Sitemap: https://www.tudominio.cl/sitemap-index.xml

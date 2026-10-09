@@ -64,8 +64,17 @@ export type SiteConfig = {
   brandLabel: string;
 };
 
+/**
+ * URL pública del sitio.
+ *
+ * En CI (GitHub Pages) se inyecta con la variable de entorno `SITE_URL`;
+ * en local se usa el PLACEHOLDER. `process` solo se lee en tiempo de build,
+ * por eso se protege con `typeof` (este módulo también llega al navegador).
+ */
+const envUrl = typeof process !== 'undefined' ? process.env.SITE_URL : undefined;
+
 export const SITE = {
-  url: 'https://www.tudominio.cl', // PLACEHOLDER: dominio real
+  url: envUrl ?? 'https://www.tudominio.cl', // PLACEHOLDER: dominio real
   name: 'Lignum',
   legalName: 'Razón Social o Persona Natural (PLACEHOLDER)',
   description:

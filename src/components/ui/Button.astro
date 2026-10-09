@@ -1,4 +1,6 @@
 ---
+import { withBase } from '@/utils/links';
+
 interface Props {
   href?: string;
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'dark' | 'outline-light';
@@ -44,12 +46,13 @@ const sizes = {
 };
 
 const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+const resolvedHref = href ? withBase(href) : undefined;
 ---
 
-{href ? (
+{resolvedHref ? (
   <a
     {...rest}
-    href={href}
+    href={resolvedHref}
     class={classes}
     aria-label={ariaLabel}
     {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

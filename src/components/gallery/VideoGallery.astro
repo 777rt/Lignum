@@ -73,7 +73,9 @@ const { items = [] } = Astro.props;
 <script>
   import { prefersReducedMotion } from '@/utils/animation';
 
-  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-scroll-video]'));
+  const videos = Array.from(
+    document.querySelectorAll<HTMLVideoElement>('video[data-scroll-video]')
+  );
 
   if (videos.length > 0 && prefersReducedMotion()) {
     /* Movimiento reducido: sin reproducción automática; se conserva el póster y
