@@ -1,0 +1,23 @@
+---
+interface Props {
+  /** Ancho del contenedor (DESIGN.md §4.4). */
+  width?: 'default' | 'narrow' | 'wide';
+  /** Etiqueta HTML. */
+  as?: 'div' | 'section' | 'header' | 'footer' | 'nav';
+  /** Clases adicionales (se unen a las del contenedor). */
+  class?: string;
+}
+
+const { width = 'default', as: Tag = 'div', class: className = '' } = Astro.props;
+
+const widths = {
+  narrow: 'max-w-[46rem]',
+  default: 'max-w-[1400px]',
+  // Excepción deliberada: las secciones fotográficas ganan aire lateral.
+  wide: 'max-w-[1560px]',
+};
+---
+
+<Tag class={`mx-auto w-full px-4 sm:px-6 lg:px-8 ${widths[width]} ${className}`}>
+  <slot />
+</Tag>

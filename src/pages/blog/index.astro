@@ -1,0 +1,46 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import FinalCTA from '@/components/home/FinalCTA.astro';
+import Container from '@/components/ui/Container.astro';
+import { buildBreadcrumbSchema } from '@/utils/seo';
+
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Blog', path: '/blog' },
+  ]),
+];
+---
+
+<MainLayout title="Blog (PLACEHOLDER)" schema={schema}>
+  <section class="bg-background pt-14 md:pt-20">
+    <Container>
+      <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-7" data-reveal>
+          <p class="eyebrow">Blog</p>
+          <h1 class="mt-3 max-w-[20ch] text-4xl font-bold md:text-5xl lg:text-6xl">
+            Consejos y novedades de jardinería (PLACEHOLDER)
+          </h1>
+        </div>
+        <div class="lg:col-span-4 lg:col-start-9" data-reveal data-reveal-delay="0.06">
+          <p class="max-w-[46ch] text-stone-700">
+            El blog se implementará en una etapa posterior con contenido útil para los clientes.
+            (PLACEHOLDER)
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="bg-background py-12 md:py-16">
+    <Container width="narrow">
+      <div class="image-slot aspect-[16/9] rounded-lg" aria-hidden="true">
+        <span class="image-slot-label">
+          Próximamente: artículos sobre mantención, poda y diseño
+        </span>
+      </div>
+    </Container>
+  </section>
+
+  <FinalCTA />
+</MainLayout>

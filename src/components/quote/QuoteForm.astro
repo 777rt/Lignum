@@ -1,0 +1,206 @@
+---
+import { MessageCircle } from '@lucide/astro';
+import Button from '@/components/ui/Button.astro';
+import { SERVICES } from '@/data/services';
+import { SITE } from '@/data/site';
+
+const zonas = SITE.zones;
+---
+
+<form
+  id="formulario-cotizacion"
+  class="rounded-lg border border-stone-200/70 bg-surface p-6 md:p-8"
+  aria-labelledby="titulo-formulario"
+  novalidate
+>
+  <h2 id="titulo-formulario" class="font-display text-2xl font-bold tracking-[-0.01em]">
+    Solicita tu cotización
+  </h2>
+  <p class="mt-2 text-sm text-stone-600">
+    Completa los datos y continuarás por WhatsApp con el mensaje listo. (PLACEHOLDER)
+  </p>
+
+  <div class="mt-7 grid gap-5 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <label for="cot-nombre" class="field-label">
+        Nombre
+      </label>
+      <input
+        id="cot-nombre"
+        name="nombre"
+        type="text"
+        required
+        autocomplete="name"
+        aria-describedby="cot-nombre-error"
+        class="field-input"
+        placeholder="Tu nombre"
+      />
+      <span id="cot-nombre-error" class="field-error" hidden></span>
+    </div>
+
+    <div>
+      <label for="cot-telefono" class="field-label">
+        Teléfono <span class="font-normal text-stone-600">(opcional)</span>
+      </label>
+      <input
+        id="cot-telefono"
+        name="telefono"
+        type="tel"
+        autocomplete="tel"
+        inputmode="tel"
+        class="field-input"
+        placeholder="+56 9 ..."
+      />
+    </div>
+
+    <div>
+      <label for="cot-servicio" class="field-label">
+        Servicio
+      </label>
+      <select
+        id="cot-servicio"
+        name="servicio"
+        required
+        aria-describedby="cot-servicio-error"
+        class="field-input"
+      >
+        <option value="">Selecciona un servicio</option>
+        {SERVICES.map((service) => (
+          <option value={service.name}>{service.name}</option>
+        ))}
+        <option value="Otro / No lo sé">Otro / No lo sé</option>
+      </select>
+      <span id="cot-servicio-error" class="field-error" hidden></span>
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="cot-comuna" class="field-label">
+        Comuna de Santiago
+      </label>
+      <input
+        id="cot-comuna"
+        name="comuna"
+        type="text"
+        list="lista-comunas"
+        autocomplete="address-level2"
+        class="field-input"
+        placeholder="Ej: Ñuñoa"
+      />
+      <datalist id="lista-comunas">
+        {zonas.map((zona) => (
+          <option value={zona} />
+        ))}
+      </datalist>
+    </div>
+
+    <div class="sm:col-span-2">
+      <label for="cot-descripcion" class="field-label">
+        Cuéntanos sobre tu proyecto
+      </label>
+      <textarea
+        id="cot-descripcion"
+        name="descripcion"
+        rows={4}
+        class="field-input resize-y"
+        placeholder="Describe brevemente qué necesitas, medidas aproximadas, tipo de espacio, etc."
+      ></textarea>
+    </div>
+  </div>
+
+  <Button type="submit" size="lg" class="mt-7 w-full sm:w-auto">
+    <MessageCircle class="size-5" aria-hidden="true" />
+    Solicitar cotización
+  </Button>
+
+  <p class="field-hint">
+    Al enviar, se abrirá WhatsApp con tu mensaje listo. Los datos no se guardan en ningún servidor.
+  </p>
+</form>
+
+<script>
+  import { buildWhatsAppMessage, generateWhatsAppLink } from '@/utils/whatsapp';
+
+  const formulario = document.querySelector<HTMLFormElement>('#formulario-cotizacion');
+
+  if (formulario) {
+    const errores = new Map<string, string>();
+
+    const marcarError = (id: string, mensaje: string): void => {
+      const campo = formulario.querySelector<HTMLElement>(`#${id}`);
+      const error = formulario.querySelector<HTMLElement>(`#${id}-error`);
+      campo?.setAttribute('aria-invalid', 'true');
+      if (error) {
+        error.textContent = mensaje;
+        error.hidden = false;
+      }
+    };
+
+    const limpiarError = (id: string): void => {
+      const campo = formulario.querySelector<HTMLElement>(`#${id}`);
+      const error = formulario.querySelector<HTMLElement>(`#${id}-error`);
+      campo?.removeAttribute('aria-invalid');
+      if (error) {
+        error.hidden = true;
+        error.textContent = '';
+      }
+    };
+
+    formulario
+      .querySelectorAll<HTMLInputElement | HTMLSelectElement>('#cot-nombre, #cot-servicio')
+      .forEach((campo) => {
+        campo.addEventListener('input', () => {
+          errores.delete(campo.id);
+          limpiarError(campo.id);
+        });
+        campo.addEventListener('change', () => {
+          errores.delete(campo.id);
+          limpiarError(campo.id);
+        });
+      });
+
+    formulario.addEventListener('submit', (event) => {
+      event.preventDefault();
+      errores.clear();
+
+      const datos = new FormData(formulario);
+      const nombre = String(datos.get('nombre') ?? '').trim();
+      const servicio = String(datos.get('servicio') ?? '').trim();
+      const telefono = String(datos.get('telefono') ?? '').trim();
+      const comuna = String(datos.get('comuna') ?? '').trim();
+      const descripcion = String(datos.get('descripcion') ?? '').trim();
+
+      if (!nombre) errores.set('cot-nombre', 'Ingresa tu nombre.');
+      if (!servicio) errores.set('cot-servicio', 'Selecciona un servicio.');
+
+      for (const [id, mensaje] of errores) {
+        marcarError(id, mensaje);
+      }
+
+      if (errores.size > 0) {
+        const primerError = errores.keys().next().value;
+        if (primerError) {
+          formulario.querySelector<HTMLElement>(`#${primerError}`)?.focus();
+        }
+        return;
+      }
+
+      const mensaje = buildWhatsAppMessage({
+        nombre,
+        servicio,
+        comuna,
+        descripcion,
+      }).trim();
+
+      const lineas = [mensaje];
+      if (telefono) {
+        lineas.push('', `Teléfono: ${telefono}`);
+      }
+
+      void window.open(
+        generateWhatsAppLink(lineas.join('\n').trim()),
+        '_blank',
+        'noopener,noreferrer'
+      );
+    });
+  }
+</script>

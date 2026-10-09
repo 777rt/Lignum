@@ -1,0 +1,109 @@
+---
+import { Video } from '@lucide/astro';
+
+export type VideoGalleryItem = {
+  /** Ruta del video dentro de /src/assets/videos o URL externa. */
+  src?: string;
+  /** Título del video. */
+  title: string;
+  /** Descripción opcional. */
+  description?: string;
+  /** Imagen de respaldo (póster): se ve solo hasta que el video arranca. */
+  poster?: string;
+};
+
+interface Props {
+  items?: VideoGalleryItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+{items.length === 0 ? (
+  <div class="grid gap-6 lg:grid-cols-12 lg:gap-8">
+    <div class="image-slot aspect-video rounded-lg lg:col-span-8" aria-hidden="true">
+      <span class="image-slot-label">
+        <Video class="size-4" />
+        Video de proyecto
+      </span>
+    </div>
+    <div class="lg:col-span-3 lg:col-start-10 lg:self-center">
+      <p class="max-w-[40ch] text-sm leading-relaxed text-stone-600">
+        Los videos reales de trabajos se agregarán aquí. (PLACEHOLDER)
+      </p>
+    </div>
+  </div>
+) : (
+  <div class="grid gap-6 sm:grid-cols-2">
+    {items.map((item) => (
+      <figure class="overflow-hidden rounded-lg border border-stone-200/70 bg-surface">
+        {item.src ? (
+          <video
+            class="aspect-video w-full bg-forest-950 object-contain"
+            muted
+            loop
+            preload="none"
+            playsinline
+            poster={item.poster}
+            data-scroll-video
+          >
+            <source src={item.src} type="video/mp4" />
+            Tu navegador no soporta video HTML5.
+          </video>
+        ) : (
+          <div class="flex aspect-video items-center justify-center bg-surface-muted text-sm font-medium text-stone-600">
+            Video pendiente
+          </div>
+        )}
+        <figcaption class="p-4">
+          <h3 class="font-semibold">{item.title}</h3>
+          {item.description && (
+            <p class="mt-1 text-sm text-pretty text-stone-700">{item.description}</p>
+          )}
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+)}
+
+{/* Reproducción gestionada por scroll: cada video arranca solo al entrar en
+    pantalla, se pausa al salir (ahorro de batería/datos) y nunca reinicia.
+    `muted`+`loop`+`playsinline` están en el propio elemento; sin autoplay en el
+    markup para no descargar los mp4 al abrir la página (preload="none"). */}
+<script>
+  import { prefersReducedMotion } from '@/utils/animation';
+
+  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-scroll-video]'));
+
+  if (videos.length > 0 && prefersReducedMotion()) {
+    /* Movimiento reducido: sin reproducción automática; se conserva el póster y
+       se habilitan los controles nativos como alternativa manual (sin botón
+       overlay). */
+    for (const video of videos) {
+      video.setAttribute('controls', '');
+    }
+  } else if (videos.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            video.muted = true;
+            video.play().catch(() => {
+              /* Autoplay bloqueado (p. ej. ahorro de datos): queda visible el
+                 póster; no se muestra ningún botón de play. */
+            });
+          } else if (!video.paused) {
+            video.pause();
+          }
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    for (const video of videos) {
+      video.muted = true;
+      observer.observe(video);
+    }
+  }
+</script>

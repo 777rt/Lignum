@@ -1,0 +1,72 @@
+---
+import imgTrabajo from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (9).jpeg';
+import MainLayout from '@/layouts/MainLayout.astro';
+import FinalCTA from '@/components/home/FinalCTA.astro';
+import Container from '@/components/ui/Container.astro';
+import {
+  buildBreadcrumbSchema,
+  buildLocalBusinessSchema,
+  buildOrganizationSchema,
+} from '@/utils/seo';
+
+const schema = [
+  buildOrganizationSchema(),
+  buildLocalBusinessSchema(),
+  buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Nosotros', path: '/nosotros' },
+  ]),
+];
+---
+
+<MainLayout title="Nosotros (PLACEHOLDER)" schema={schema}>
+  <section class="bg-background pt-14 md:pt-20">
+    <Container>
+      <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+        <div class="lg:col-span-7" data-reveal>
+          <p class="eyebrow">Nosotros</p>
+          <h1 class="mt-3 max-w-[16ch] text-4xl font-bold md:text-5xl lg:text-6xl">
+            La empresa detrás del jardín
+          </h1>
+        </div>
+        <div class="lg:col-span-4 lg:col-start-9" data-reveal data-reveal-delay="0.06">
+          <p class="max-w-[46ch] text-stone-700">
+            Esta sección se redactará con la información real de la empresa: historia, trayectoria
+            verificada, equipo y forma de trabajo. (PLACEHOLDER)
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="bg-background py-12 md:py-16">
+    <Container>
+      {/* Imagen [nosotros], banda panorámica 21/9 (móvil 16/10): trabajo real en curso */}
+      <img
+        src={imgTrabajo.src}
+        alt="Trabajador instalando rollos de césped en un patio junto a la vivienda"
+        width={imgTrabajo.width}
+        height={imgTrabajo.height}
+        loading="lazy"
+        decoding="async"
+        class="aspect-[16/10] w-full rounded-lg object-cover lg:aspect-[21/9]"
+      />
+      <p class="mt-3.5 text-sm text-stone-600">Equipo y espacio de trabajo (PLACEHOLDER)</p>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-12">
+        <div class="max-w-[58ch] text-stone-700 lg:col-span-5 lg:col-start-7">
+          <p>
+            No se incluirán datos no confirmados: años de experiencia, cantidad de proyectos o
+            clientes. Todo el contenido definitivo será entregado por la empresa. (PLACEHOLDER)
+          </p>
+          <p class="mt-4">
+            El objetivo de esta página es transmitir la forma de trabajar de Lignum con
+            transparencia. (PLACEHOLDER)
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <FinalCTA />
+</MainLayout>

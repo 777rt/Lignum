@@ -1,0 +1,41 @@
+---
+import Gallery, { type GalleryItem } from '@/components/gallery/Gallery.astro';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+const trabajos: GalleryItem[] = [
+  {
+    alt: 'Fotografía de proyecto de jardinería (PLACEHOLDER)',
+    caption: 'Diseño y construcción de jardín (PLACEHOLDER)',
+  },
+  {
+    alt: 'Fotografía de proyecto de mantención (PLACEHOLDER)',
+    caption: 'Mantención mensual de área verde (PLACEHOLDER)',
+  },
+  {
+    alt: 'Fotografía de proyecto de riego (PLACEHOLDER)',
+    caption: 'Instalación de riego automático (PLACEHOLDER)',
+  },
+];
+---
+
+<section class="bg-surface py-16 md:py-20" data-featured-work>
+  <Container>
+    <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+      <SectionTitle
+        title="Trabajos recientes"
+        description="Fotografías de proyectos realizados en Santiago. Galería en preparación. (PLACEHOLDER)"
+        heading="h2"
+        class="max-w-[34rem]"
+      />
+      <Button href="/trabajos" variant="outline" size="md">
+        Ver todos los trabajos
+      </Button>
+    </div>
+
+    <div class="mt-10">
+      <Gallery items={trabajos} />
+    </div>
+  </Container>
+</section>

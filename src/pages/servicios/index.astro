@@ -1,0 +1,64 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import ServiceGrid from '@/components/services/ServiceGrid.astro';
+import FinalCTA from '@/components/home/FinalCTA.astro';
+import Container from '@/components/ui/Container.astro';
+import { SERVICES } from '@/data/services';
+import {
+  buildBreadcrumbSchema,
+  buildLocalBusinessSchema,
+  buildOrganizationSchema,
+} from '@/utils/seo';
+
+const schema = [
+  buildOrganizationSchema(),
+  buildLocalBusinessSchema(),
+  buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Servicios', path: '/servicios' },
+  ]),
+];
+
+const total = String(SERVICES.length).padStart(2, '0');
+---
+
+<MainLayout
+  title="Servicios de jardinería (PLACEHOLDER)"
+  description="Conoce los servicios: mantención de jardines, jardinería, paisajismo, podas y mantención de áreas verdes en Santiago. (PLACEHOLDER)"
+  schema={schema}
+>
+  <section class="bg-background pt-14 md:pt-20">
+    <Container>
+      <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-7" data-reveal>
+          <h1 class="max-w-[18ch] text-4xl font-bold md:text-5xl lg:text-6xl">
+            Servicios de jardinería en Santiago
+          </h1>
+          <p class="mt-5 max-w-[58ch] text-lg text-stone-700">
+            Cinco líneas de servicio para jardines particulares y áreas verdes. Cada una contará
+            próximamente con su propia página de detalle. (PLACEHOLDER)
+          </p>
+        </div>
+        <div
+          class="lg:col-span-4 lg:col-start-9 lg:text-right"
+          data-reveal
+          data-reveal-delay="0.06"
+        >
+          <p class="font-mono text-4xl tabular-nums text-forest-600">{total}</p>
+          <p class="mt-1 text-sm text-stone-600">servicios disponibles</p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="bg-background py-12 md:py-16">
+    <Container>
+      <ServiceGrid services={SERVICES} />
+      <p class="mt-12 max-w-[52ch] text-sm text-stone-600">
+        ¿No encuentras lo que buscas? Escríbenos y lo conversamos. (PLACEHOLDER)
+      </p>
+    </Container>
+  </section>
+
+  <FinalCTA />
+</MainLayout>

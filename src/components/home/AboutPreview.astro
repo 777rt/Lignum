@@ -1,0 +1,44 @@
+---
+import imgEquipo from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM.jpeg';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+---
+
+<section class="bg-background py-16 md:py-20" data-about-preview>
+  <Container>
+    <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5" data-reveal>
+        <img
+          src={imgEquipo.src}
+          alt="Trabajador arborizado en una palmera con equipo de seguridad y cuerda"
+          width={imgEquipo.width}
+          height={imgEquipo.height}
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/5] w-full rounded-lg object-cover"
+        />
+      </div>
+
+      <div class="lg:col-span-6 lg:col-start-7" data-reveal data-reveal-delay="0.06">
+        <SectionTitle eyebrow="Nosotros" title="Quiénes somos. Jardinería honesta, rápida y seguro" heading="h2" />
+
+        <div class="mt-5 max-w-[60ch] space-y-4 text-stone-700">
+          <p>
+            Nacimos para resolver los problemas típicos al contratar jardinería en Santiago:
+            falta de respuesta, retrasos no avisados y presupuestos que cambian a última hora.
+            Nos enfocamos a ofrecer un servicio profesional donde la puntualidad y la claridad son lo primero. 
+          </p>
+          <p>
+            Trabajamos con cotizaciones transparentes desde el primer contacto y un equipo comprometido con dejar
+            tu jardín, patio o área verde impecable y ordenado desde la primera visita.
+          </p>
+        </div>
+
+        <Button href="/nosotros" variant="outline" size="md" class="mt-7">
+          Conocer más
+        </Button>
+      </div>
+    </div>
+  </Container>
+</section>

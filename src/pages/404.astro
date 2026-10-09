@@ -1,0 +1,29 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+---
+
+<MainLayout title="Página no encontrada" description="La página que buscas no existe." noindex>
+  <section class="bg-background">
+    <Container>
+      <div class="flex min-h-[70svh] flex-col justify-center py-20">
+        <p class="font-mono text-sm uppercase tracking-[0.18em] text-stone-600">Error 404</p>
+        <h1 class="mt-4 max-w-[16ch] text-4xl font-bold md:text-5xl lg:text-6xl">
+          Página no encontrada
+        </h1>
+        <p class="mt-5 max-w-[52ch] text-lg text-stone-700">
+          La página que buscas no existe o fue movida. (PLACEHOLDER)
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <Button href="/" size="lg">
+            Volver al inicio
+          </Button>
+          <Button href="/contacto" variant="outline" size="lg">
+            Contacto
+          </Button>
+        </div>
+      </div>
+    </Container>
+  </section>
+</MainLayout>

@@ -1,0 +1,50 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import { SERVICES } from '@/data/services';
+---
+
+<section class="bg-background py-16 md:py-20" data-services-preview>
+  <Container>
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-4" data-reveal>
+        <SectionTitle
+          title="Servicios"
+          description="Soluciones de jardineria rápida, transparente y a medida en todo Santiago. Presupuestos claros sin costos ocultos para mantener tus espacios verdes siempre impecables."
+          heading="h2"
+        />
+        <Button href="/servicios" variant="outline" size="md" class="mt-7">
+          Ver todos los servicios
+        </Button>
+      </div>
+
+      <ul class="lg:col-span-8">
+        {SERVICES.map((service, index) => (
+          <li
+            class="border-t hairline last:border-b"
+            data-reveal
+            data-reveal-delay={String(index * 0.05)}
+          >
+            <a
+              href={`/servicios#${service.slug}`}
+              class="group flex items-center gap-4 py-5 md:gap-6 md:py-6"
+            >
+              <span class="w-6 shrink-0 font-mono text-xs tabular-nums text-stone-600">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span class="font-display text-2xl font-semibold tracking-[-0.01em] transition-transform duration-fast ease-out-expo group-hover:[@media(hover:hover)_and_(pointer:fine)]:translate-x-1 md:text-[2rem]">
+                {service.name}
+              </span>
+              <ArrowUpRight
+                class="ml-auto size-5 shrink-0 text-stone-600 transition-[transform,color] duration-fast ease-out-expo group-hover:[@media(hover:hover)_and_(pointer:fine)]:-translate-y-0.5 group-hover:[@media(hover:hover)_and_(pointer:fine)]:translate-x-0.5 group-hover:text-forest-600"
+                aria-hidden="true"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,63 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'dark' | 'outline-light';
+  size?: 'sm' | 'md' | 'lg';
+  external?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  ariaLabel?: string;
+  /** Clases adicionales (se unen a las del botón). */
+  class?: string;
+  /** Atributos adicionales (p. ej. data-*) reenviados al elemento. */
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  external = false,
+  type = 'button',
+  ariaLabel,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+// base: feedback activo + foco global (:focus-visible en global.css)
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-md font-medium leading-tight tracking-normal ' +
+  'transition-[background-color,color,border-color,transform] duration-fast ease-out-expo active:scale-[0.995]';
+
+const variants = {
+  primary: 'bg-forest-800 text-white hover:bg-forest-700',
+  secondary: 'bg-sage-100 text-forest-900 hover:bg-olive-300',
+  outline: 'border border-stone-200 text-forest-900 hover:border-stone-500 hover:bg-surface-subtle',
+  ghost: 'text-forest-800 hover:bg-surface-muted',
+  dark: 'bg-white text-forest-900 hover:bg-stone-100',
+  'outline-light': 'border border-white/25 text-white hover:border-white/45 hover:bg-white/10',
+};
+
+const sizes = {
+  sm: 'min-h-11 px-4 text-sm',
+  md: 'min-h-12 px-5 text-[0.9375rem]',
+  lg: 'min-h-[3.25rem] px-7 text-base',
+};
+
+const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+---
+
+{href ? (
+  <a
+    {...rest}
+    href={href}
+    class={classes}
+    aria-label={ariaLabel}
+    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+  >
+    <slot />
+  </a>
+) : (
+  <button {...rest} type={type} class={classes} aria-label={ariaLabel}>
+    <slot />
+  </button>
+)}

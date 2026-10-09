@@ -1,0 +1,97 @@
+---
+import ServiceCard from '@/components/services/ServiceCard.astro';
+import type { Service } from '@/data/services';
+
+interface Props {
+  services: Service[];
+}
+
+const { services } = Astro.props;
+---
+
+{/* 1) Corre ANTES de que se pinte el selector: con JS activo, los paneles sin
+    data-open nacen colapsados (sin JS la clase nunca se añade y las 5
+    descripciones quedan visibles). */}
+<script is:inline>
+  document.documentElement.classList.add('selector-ready');
+</script>
+
+{/* Índice editorial de servicios: un único servicio expandido a la vez.
+    El estado se refleja en la URL con #slug (ver script de interacción). */}
+<div data-service-selector>
+  {services.map((service, i) => (
+    <ServiceCard service={service} index={i + 1} />
+  ))}
+  <div class="border-t border-stone-200/70" aria-hidden="true" />
+</div>
+
+{/* 2) Pre-paint: si la URL trae #slug, ese servicio queda expandido (y los
+    demás colapsados) antes del primer render y antes del salto al ancla. */}
+<script is:inline>
+  (function () {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    if (!hash) return;
+    const items = Array.from(document.querySelectorAll('[data-service-item]'));
+    const objetivo = items.find((item) => item.getAttribute('data-slug') === hash);
+    if (!objetivo) return;
+    for (const item of items) {
+      const panel = item.querySelector('[data-service-panel]');
+      const trigger = item.querySelector('[data-service-trigger]');
+      if (!panel) continue;
+      const abierto = item === objetivo;
+      if (abierto) {
+        panel.setAttribute('data-open', '');
+      } else {
+        panel.removeAttribute('data-open');
+      }
+      trigger?.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    }
+  })();
+</script>
+
+<script>
+  type Entry = {
+    slug: string;
+    panel: HTMLElement;
+    trigger: HTMLButtonElement;
+  };
+
+  const entries: Entry[] = [];
+  for (const item of document.querySelectorAll<HTMLElement>('[data-service-item]')) {
+    const slug = item.dataset.slug;
+    const panel = item.querySelector<HTMLElement>('[data-service-panel]');
+    const trigger = item.querySelector<HTMLButtonElement>('[data-service-trigger]');
+    if (slug && panel && trigger) entries.push({ slug, panel, trigger });
+  }
+
+  /** Abre únicamente `target` (undefined = ninguno) y sincroniza aria + hash. */
+  function open(target: Entry | undefined, updateHash = true): void {
+    for (const entry of entries) {
+      const abierto = entry === target;
+      if (abierto) entry.panel.setAttribute('data-open', '');
+      else entry.panel.removeAttribute('data-open');
+      entry.trigger.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    }
+    if (updateHash) {
+      const url = target
+        ? `#${target.slug}`
+        : `${window.location.pathname}${window.location.search}`;
+      window.history.replaceState(null, '', url);
+    }
+  }
+
+  for (const entry of entries) {
+    entry.trigger.addEventListener('click', () => {
+      const abierto = entry.panel.hasAttribute('data-open');
+      open(abierto ? undefined : entry);
+    });
+  }
+
+  window.addEventListener('hashchange', () => {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
+    open(
+      entries.find((entry) => entry.slug === hash),
+      false
+    );
+  });
+</script>

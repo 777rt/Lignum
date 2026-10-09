@@ -1,0 +1,22 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Hero from '@/components/home/Hero.astro';
+import ServicesPreview from '@/components/home/ServicesPreview.astro';
+import FeaturedWork from '@/components/home/FeaturedWork.astro';
+import AboutPreview from '@/components/home/AboutPreview.astro';
+import Testimonials from '@/components/home/Testimonials.astro';
+import FinalCTA from '@/components/home/FinalCTA.astro';
+import { buildLocalBusinessSchema, buildOrganizationSchema, buildWebSiteSchema } from '@/utils/seo';
+import { SITE } from '@/data/site';
+
+const schema = [buildOrganizationSchema(), buildWebSiteSchema(), buildLocalBusinessSchema()];
+---
+
+<MainLayout title="Portada (PLACEHOLDER)" description={SITE.description} schema={schema}>
+  <Hero />
+  <ServicesPreview />
+  <FeaturedWork />
+  <AboutPreview />
+  <Testimonials />
+  <FinalCTA />
+</MainLayout>

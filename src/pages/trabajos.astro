@@ -1,0 +1,125 @@
+---
+import imgCorte from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM (2).jpeg';
+import imgInstalacion from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (8).jpeg';
+import imgJardin from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (2).jpeg';
+import imgRollos from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (10).jpeg';
+import imgSendero from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (5).jpeg';
+import imgAreaVerde from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (11).jpeg';
+import posterPalmera from '@/assets/images/video-poda-palmera-poster.jpg';
+import posterTronco from '@/assets/images/video-poda-tronco-ladera-poster.jpg';
+import videoPalmera from '@/assets/videos/poda-palmera.mp4';
+import videoTronco from '@/assets/videos/poda-tronco-ladera.mp4';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Gallery, { type GalleryItem } from '@/components/gallery/Gallery.astro';
+import VideoGallery, { type VideoGalleryItem } from '@/components/gallery/VideoGallery.astro';
+import FinalCTA from '@/components/home/FinalCTA.astro';
+import Container from '@/components/ui/Container.astro';
+import { buildBreadcrumbSchema } from '@/utils/seo';
+
+const schema = [
+  buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Trabajos', path: '/trabajos' },
+  ]),
+];
+
+/**
+ * Selección editorial de las fotografías propias: una sola toma por proyecto y
+ * tipo de trabajo, sin repetir imágenes usadas en otras secciones. La galería
+ * alterna los patrones 16/10 → 3/4 → 21/9 del componente Gallery.
+ */
+const trabajos: GalleryItem[] = [
+  {
+    src: imgInstalacion.src,
+    alt: 'Trabajador instalando rollos de césped sobre el terreno junto a la terraza',
+  },
+  {
+    src: imgRollos.src,
+    alt: 'Trabajador acomodando rollos de césped junto a la vivienda',
+  },
+  {
+    src: imgJardin.src,
+    alt: 'Jardín con césped, arbustos ornamentales y árboles junto a un muro',
+  },
+  {
+    src: imgCorte.src,
+    alt: 'Corte de césped junto a una pileta y la terraza de una casa',
+  },
+  {
+    src: imgSendero.src,
+    alt: 'Sendero de placas de hormigón entre el jardín y el portón de madera',
+  },
+  {
+    src: imgAreaVerde.src,
+    alt: 'Área verde con césped cortado junto a un muro blanco y un cerco metálico',
+  },
+];
+
+/**
+ * Selección editorial de video: 2 piezas con trabajo real en ejecución y
+ * composición estable. Las copias en /src/assets/videos están generadas sin
+ * pista de audio (imposible reproducir sonido); el componente los muestra en
+ * loop silenciado y arranca/pausa según visibilidad (IntersectionObserver),
+ * con póster solo como respaldo de carga.
+ */
+const videos: VideoGalleryItem[] = [
+  {
+    src: videoPalmera,
+    poster: posterPalmera.src,
+    title: 'Poda de palmera',
+    description: 'Trabajador arborizado podando una palmera en lo alto, asegurado con cuerda.',
+  },
+  {
+    src: videoTronco,
+    poster: posterTronco.src,
+    title: 'Corte de tronco en pendiente',
+    description: 'Corte con motosierra de un tronco de palmera derribado en una ladera.',
+  },
+];
+---
+
+<MainLayout title="Trabajos (PLACEHOLDER)" schema={schema}>
+  <section class="bg-background pt-14 md:pt-20">
+    <Container>
+      <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-7" data-reveal>
+          <h1 class="max-w-[16ch] text-4xl font-bold md:text-5xl lg:text-6xl">
+            Trabajos realizados
+          </h1>
+          <p class="mt-5 max-w-[58ch] text-lg text-stone-700">
+            Fotografías y videos de proyectos en Santiago. La galería se completará con material
+            profesional. (PLACEHOLDER)
+          </p>
+        </div>
+        <div
+          class="lg:col-span-4 lg:col-start-9 lg:text-right"
+          data-reveal
+          data-reveal-delay="0.06"
+        >
+          <p class="eyebrow">Galería en preparación</p>
+          <p class="mt-2 text-sm text-stone-600">
+            Espacio reservado para fotografía y video profesional. (PLACEHOLDER)
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="bg-background py-12 md:py-16">
+    <Container>
+      <div class="space-y-14 md:space-y-20">
+        <div>
+          <h2 class="mb-6 font-display text-xl font-semibold md:text-2xl">Fotografías</h2>
+          <Gallery items={trabajos} />
+        </div>
+
+        <div>
+          <h2 class="mb-6 font-display text-xl font-semibold md:text-2xl">Videos</h2>
+          <VideoGallery items={videos} />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <FinalCTA />
+</MainLayout>
