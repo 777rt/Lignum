@@ -3,7 +3,13 @@ import '@/styles/global.css';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
-import { buildPageTitle, buildCanonicalURL, type JsonLd } from '@/utils/seo';
+import {
+  buildPageTitle,
+  buildCanonicalURL,
+  buildMetaDescription,
+  estaPendiente,
+  type JsonLd,
+} from '@/utils/seo';
 import { SITE } from '@/data/site';
 import { withBase } from '@/utils/links';
 
@@ -22,7 +28,7 @@ interface Props {
 
 const {
   title,
-  description = SITE.description,
+  description,
   canonicalPath = Astro.url.pathname,
   image = SITE.ogImage,
   type = 'website',
@@ -30,7 +36,8 @@ const {
   schema = [],
 } = Astro.props;
 
-const fullTitle = buildPageTitle(title);
+const fullTitle = estaPendiente(title) ? buildPageTitle(SITE.name) : buildPageTitle(title);
+const metaDescription = buildMetaDescription(description, SITE.description);
 const canonical = buildCanonicalURL(canonicalPath);
 const ogImage = image ? new URL(image, SITE.url).toString() : '';
 ---
@@ -43,7 +50,7 @@ const ogImage = image ? new URL(image, SITE.url).toString() : '';
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content={SITE.themeColor} />
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    {metaDescription && <meta name="description" content={metaDescription} />}
     <link rel="canonical" href={canonical} />
 
     {/* Preparación de reveals: solo si el usuario no pide movimiento reducido.
@@ -59,13 +66,13 @@ const ogImage = image ? new URL(image, SITE.url).toString() : '';
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content={SITE.locale} />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    {metaDescription && <meta property="og:description" content={metaDescription} />}
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
+    {metaDescription && <meta name="twitter:description" content={metaDescription} />}
     {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     {noindex && <meta name="robots" content="noindex, nofollow" />}

@@ -10,11 +10,10 @@
  * La ruta futura de cada detalle será: /servicios/{slug} (ver README).
  */
 
-import imgAreasVerdes from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM (3).jpeg';
-import imgJardineria from '@/assets/images/WhatsApp Image 2026-10-08 at 9.41.51 PM.jpeg';
-import imgJardines from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM (2).jpeg';
-import imgPaisajismo from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (1).jpeg';
-import imgPodas from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM (1).jpeg';
+import imgDesmalezado from '@/assets/images/desmalezado-desbrozadora-cesped.jpeg';
+import imgJardines from '@/assets/images/mantencion-cesped-cortacesped-piscina.jpeg';
+import imgPaisajismo from '@/assets/images/paisajismo-sendero-piedras.jpeg';
+import imgPodas from '@/assets/images/poda-palmera-motosierra-tronco.jpeg';
 
 export type Service = {
   /** Slug de la URL futura de la página de detalle. */
@@ -46,7 +45,7 @@ export const SERVICES: Service[] = [
     description: 'Descripción pendiente para mantención de jardines. (PLACEHOLDER)',
     icon: 'sprout',
     image: imgJardines,
-    imageAlt: 'Corte de césped en un jardín con líneas de corte, patio y un perro sobre el pasto',
+    imageAlt: 'Cortacésped sobre césped recién cortado junto a una pileta y el patio de una casa',
     mainService: true,
     status: 'placeholder',
   },
@@ -57,8 +56,9 @@ export const SERVICES: Service[] = [
       'Limpieza profunda y eliminación de maleza, matorrales y vegetación no deseada en patios, parcelas y antejardines. Dejamos tu terreno limpio, seguro y ordenado con retiro de escombros vegetales.',
     description: 'Descripción pendiente para jardinería. (PLACEHOLDER)',
     icon: 'trees',
-    image: imgJardineria,
-    imageAlt: 'Cantera con estrelichias y arbustos podados, con mantillo nuevo, junto a la vereda',
+    image: imgDesmalezado,
+    imageAlt:
+      'Trabajador desbrozando el césped con una desbrozadora, con cortacésped y soplador en primer plano',
     status: 'placeholder',
   },
   {
@@ -69,7 +69,8 @@ export const SERVICES: Service[] = [
     description: 'Descripción pendiente para paisajismo. (PLACEHOLDER)',
     icon: 'pencil-ruler',
     image: imgPaisajismo,
-    imageAlt: 'Sendero de piedras entre plantaciones de arbustos y gramíneas',
+    imageAlt:
+      'Sendero de piedras redondas entre plantaciones de arbustos y gramíneas junto a la vivienda',
     status: 'placeholder',
   },
   {
@@ -90,8 +91,6 @@ export const SERVICES: Service[] = [
       'Servicio seguro de tala y extracción de árboles en casas, terrenos y parcelas. Agendamiento puntual en todo Chile y tarifas claras desde la primera consulta. ',
     description: 'Descripción pendiente para mantención de áreas verdes. (PLACEHOLDER)',
     icon: 'leaf',
-    image: imgAreasVerdes,
-    imageAlt: 'Área verde recién cortada con líneas de corte, un árbol y setos junto a un muro',
     status: 'placeholder',
   },
 ];

@@ -1,21 +1,38 @@
 ---
+import imgCantera from '@/assets/images/jardineria-cantera-limpia-clivo.jpeg';
+import imgCorteCesped from '@/assets/images/mantencion-cesped-cortacesped-piscina.jpeg';
+import imgPreparacionTerreno from '@/assets/images/preparacion-terreno-suelo-preparado.jpeg';
 import Gallery, { type GalleryItem } from '@/components/gallery/Gallery.astro';
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
 import SectionTitle from '@/components/ui/SectionTitle.astro';
 
+/**
+ * Trabajos destacados de la portada.
+ *
+ * Solo fotografía propia (DESIGN §8.3). Cada pie describe exactamente lo que
+ * muestra la imagen: no se rotulan trabajos que la foto no demuestra (riego,
+ * tala) ni se inventan referencias. El orden respeta el patrón de
+ * proporciones de `Gallery`: feature 16/10 → portrait 3/4 → wide 21/9.
+ */
 const trabajos: GalleryItem[] = [
   {
-    alt: 'Fotografía de proyecto de jardinería (PLACEHOLDER)',
-    caption: 'Diseño y construcción de jardín (PLACEHOLDER)',
+    src: imgCorteCesped.src,
+    alt: 'Cortacésped autopropulsado sobre el césped recién cortado, junto a una pileta con terraza y maceteros',
+    caption: 'Corte de césped en jardín con pileta',
+    category: 'Mantención',
   },
   {
-    alt: 'Fotografía de proyecto de mantención (PLACEHOLDER)',
-    caption: 'Mantención mensual de área verde (PLACEHOLDER)',
+    src: imgCantera.src,
+    alt: 'Cantera contra un muro blanco, con el suelo despejado de malezas, una mata de clivo en flor y un árbol joven',
+    caption: 'Cantera despejada de malezas y con flores',
+    category: 'Mantención',
   },
   {
-    alt: 'Fotografía de proyecto de riego (PLACEHOLDER)',
-    caption: 'Instalación de riego automático (PLACEHOLDER)',
+    src: imgPreparacionTerreno.src,
+    alt: 'Patio con el terreno completamente rastrillado y preparado a tierra, con una bolsa de sustrato y una pala, junto a una pileta con reja',
+    caption: 'Preparación de terreno para siembra',
+    category: 'Paisajismo',
   },
 ];
 ---
@@ -25,7 +42,7 @@ const trabajos: GalleryItem[] = [
     <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
       <SectionTitle
         title="Trabajos recientes"
-        description="Fotografías de proyectos realizados en Santiago. Galería en preparación. (PLACEHOLDER)"
+        description="Una muestra del trabajo en terreno: corte de césped, limpieza de canteras y preparación de suelo."
         heading="h2"
         class="max-w-[34rem]"
       />

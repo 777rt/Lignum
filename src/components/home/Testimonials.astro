@@ -1,17 +1,48 @@
 ---
 import Container from '@/components/ui/Container.astro';
+
+/**
+ * Testimonios de clientes.
+ *
+ * La sección solo se publica con material real: citas verificadas y
+ * autorizadas por escrito por la empresa. Mientras la lista esté vacía el
+ * bloque no se renderiza, de modo que la portada no muestra una cita
+ * inventada, ni un autor ficticio, ni un hueco vacío.
+ *
+ * Para activarla basta con cargar las citas autorizadas abajo: no hay que
+ * tocar ningún otro archivo.
+ */
+type Testimonio = {
+  /** Cita textual del cliente. */
+  cita: string;
+  /** Nombre de quien avala la cita. */
+  autor: string;
+  /** Detalle complementario (tipo de trabajo o comuna). */
+  detalle?: string;
+};
+
+const TESTIMONIOS: Testimonio[] = [];
 ---
 
-<section class="bg-sage-100 py-16 md:py-20" data-testimonials>
-  <Container width="narrow">
-    <div class="text-center" data-reveal>
-      <span class="font-display text-6xl leading-none text-olive-500" aria-hidden="true">
-        “
-      </span>
-      <blockquote class="mx-auto mt-3 max-w-[44ch] font-display text-xl italic leading-snug text-stone-800 md:text-2xl">
-        Los testimonios reales de clientes se agregarán aquí posteriormente. (PLACEHOLDER)
-      </blockquote>
-      <p class="mt-6 text-sm text-stone-600">Cliente verificado (PLACEHOLDER)</p>
-    </div>
-  </Container>
-</section>
+{TESTIMONIOS.length > 0 && (
+  <section class="bg-sage-100 py-16 md:py-20" data-testimonials>
+    <Container width="narrow">
+      <div class="text-center" data-reveal>
+        {TESTIMONIOS.map((testimonio) => (
+          <figure>
+            <span class="font-display text-6xl leading-none text-olive-500" aria-hidden="true">
+              “
+            </span>
+            <blockquote class="mx-auto mt-3 max-w-[44ch] font-display text-xl italic leading-snug text-stone-800 md:text-2xl">
+              {testimonio.cita}
+            </blockquote>
+            <figcaption class="mt-6 text-sm text-stone-600">
+              {testimonio.autor}
+              {testimonio.detalle && <span> · {testimonio.detalle}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </Container>
+  </section>
+)}

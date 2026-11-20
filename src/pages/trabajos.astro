@@ -1,10 +1,10 @@
 ---
-import imgCorte from '@/assets/images/WhatsApp Image 2026-10-08 at 4.43.00 PM (2).jpeg';
-import imgInstalacion from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (8).jpeg';
-import imgJardin from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (2).jpeg';
-import imgRollos from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (10).jpeg';
-import imgSendero from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (5).jpeg';
-import imgAreaVerde from '@/assets/images/WhatsApp Image 2026-10-08 at 5.47.57 PM (11).jpeg';
+import imgInstalacion from '@/assets/images/instalacion-cesped-rollos-trabajador.jpeg';
+import imgRollos from '@/assets/images/instalacion-cesped-rollos-vivienda.jpeg';
+import imgAreaVerde from '@/assets/images/mantencion-area-verde-lineas-corte.jpeg';
+import imgJardineria from '@/assets/images/jardineria-limpieza-cantera-estrelicias.jpeg';
+import imgJardin from '@/assets/images/jardin-cesped-cortado-perros.jpeg';
+import imgResultado from '@/assets/images/resultado-instalacion-cesped.jpeg';
 import posterPalmera from '@/assets/images/video-poda-palmera-poster.jpg';
 import posterTronco from '@/assets/images/video-poda-tronco-ladera-poster.jpg';
 import videoPalmera from '@/assets/videos/poda-palmera.mp4';
@@ -31,27 +31,27 @@ const schema = [
 const trabajos: GalleryItem[] = [
   {
     src: imgInstalacion.src,
-    alt: 'Trabajador instalando rollos de césped sobre el terreno junto a la terraza',
+    alt: 'Trabajador instalando rollos de césped sobre el terreno preparado junto a la terraza',
   },
   {
     src: imgRollos.src,
     alt: 'Trabajador acomodando rollos de césped junto a la vivienda',
   },
   {
-    src: imgJardin.src,
-    alt: 'Jardín con césped, arbustos ornamentales y árboles junto a un muro',
-  },
-  {
-    src: imgCorte.src,
-    alt: 'Corte de césped junto a una pileta y la terraza de una casa',
-  },
-  {
-    src: imgSendero.src,
-    alt: 'Sendero de placas de hormigón entre el jardín y el portón de madera',
-  },
-  {
     src: imgAreaVerde.src,
-    alt: 'Área verde con césped cortado junto a un muro blanco y un cerco metálico',
+    alt: 'Área verde recién cortada con líneas de corte, arbustos y un árbol junto a un muro',
+  },
+  {
+    src: imgJardineria.src,
+    alt: 'Cantera de estrelichias con tierra nueva y soplador de hojas tras la limpieza del jardín',
+  },
+  {
+    src: imgJardin.src,
+    alt: 'Jardín residencial con césped recién cortado y perros sobre el pasto',
+  },
+  {
+    src: imgResultado.src,
+    alt: 'Césped recién instalado junto a un muro blanco y un cerco metálico',
   },
 ];
 
@@ -79,7 +79,7 @@ const videos: VideoGalleryItem[] = [
 ];
 ---
 
-<MainLayout title="Trabajos (PLACEHOLDER)" schema={schema}>
+<MainLayout title="Trabajos" schema={schema}>
   <section class="bg-background pt-14 md:pt-20">
     <Container>
       <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">

@@ -14,7 +14,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report"
   },
   "dependencies": {
     "@lucide/astro": "^1.52.0",
@@ -28,7 +31,9 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.4",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.6",
     "eslint": "^10.12.0",
     "eslint-plugin-astro": "^1.7.0",
     "globals": "^17.13.0",

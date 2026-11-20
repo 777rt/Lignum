@@ -2,132 +2,190 @@
 import { AtSign, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/astro';
 import { SITE } from '@/data/site';
 import { SERVICES } from '@/data/services';
-import { generateWhatsAppLink } from '@/utils/whatsapp';
 import { withBase } from '@/utils/links';
+import { generateWhatsAppLink } from '@/utils/whatsapp';
 
 const year = new Date().getFullYear();
 const whatsappHref = generateWhatsAppLink();
+const telHref = `tel:${SITE.phone.replace(/\s/g, '')}`;
+
+const estaConfirmado = (texto: string) => !/\(PLACEHOLDER\)/i.test(texto);
+const descripcion = estaConfirmado(SITE.description) ? SITE.description : '';
+const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
 ---
 
-<footer class="border-t border-olive-500/30 bg-forest-950 text-white">
-  <div class="mx-auto grid max-w-[1400px] gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 md:py-16 lg:grid-cols-12 lg:px-8">
-    <section class="lg:col-span-5">
-      <a
-        href={withBase('/')}
-        class="inline-flex items-center gap-2.5"
-        aria-label={`Ir al inicio — ${SITE.brandLabel}`}
-      >
-        <img
-          src={SITE.logo.path}
-          alt={SITE.logo.alt}
-          class="h-7 w-auto"
-          width="262"
-          height="261"
-          loading="lazy"
-        />
-        <span class="font-display text-lg font-bold tracking-[-0.01em]">{SITE.brandLabel}</span>
-      </a>
-      <p class="mt-4 max-w-sm text-sm leading-relaxed text-white/55">{SITE.description}</p>
-      <p class="mt-6 font-display text-sm italic text-olive-300">{SITE.tagline}</p>
-    </section>
+<footer class="relative isolate overflow-hidden border-t border-olive-500/30 bg-forest-950 text-white">
+  {/* Motivo de capas orgánicas extraído de la segunda imagen del brief; adaptado a los tokens de Lignum. */}
+  <svg
+    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-64 w-full sm:h-80 lg:h-[26rem]"
+    viewBox="0 0 1440 420"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fill="var(--color-olive-500)"
+      opacity="0.22"
+      d="M0 208C170 174 318 202 470 180c164-24 274-92 440-78 176 15 330 102 530 62v256H0Z"
+    />
+    <path
+      fill="var(--color-forest-700)"
+      opacity="0.62"
+      d="M0 276c196-56 352-6 512-34 180-32 306-116 486-92 172 23 318 100 442 88v182H0Z"
+    />
+    <path
+      fill="var(--color-forest-800)"
+      opacity="0.82"
+      d="M0 336c188-44 344 16 530-16 178-31 316-90 478-68 164 22 304 78 432 70v98H0Z"
+    />
+    <path
+      fill="var(--color-forest-900)"
+      d="M0 380c210-34 374 24 566-8 176-29 322-66 484-46 158 20 282 54 390 48v46H0Z"
+    />
+    <path
+      fill="var(--color-forest-950)"
+      d="M0 404c220-22 396 18 592-8 182-24 330-42 488-26 146 15 268 34 360 30v20H0Z"
+    />
+  </svg>
 
-    <nav aria-label="Servicios" class="lg:col-span-2 lg:col-start-7">
-      <h2 class="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">Servicios</h2>
-      <ul class="mt-4 space-y-2.5 text-sm">
-        {SERVICES.map((service) => (
-          <li>
-            <a
-              href={withBase(`/servicios#${service.slug}`)}
-              class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
-            >
-              {service.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-
-    <nav aria-label="Navegación" class="lg:col-span-2">
-      <h2 class="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">Sitio</h2>
-      <ul class="mt-4 space-y-2.5 text-sm">
-        {SITE.navigation.map((link) => (
-          <li>
-            <a
-              href={withBase(link.href)}
-              class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-
-    <section aria-label="Información de contacto" class="lg:col-span-3">
-      <h2 class="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">Contacto</h2>
-      <ul class="mt-4 space-y-3 text-sm">
-        <li class="flex items-center gap-3">
-          <Phone class="size-4 shrink-0 text-olive-300/70" aria-hidden="true" />
-          <a
-            href={`tel:${SITE.phone.replace(/\s/g, '')}`}
-            class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
+  <div class="relative mx-auto max-w-[1400px] px-4 pt-14 pb-52 sm:px-6 md:pt-20 lg:px-8 lg:pb-64">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <section aria-label="Marca Lignum" class="lg:col-span-5">
+        <a
+          href={withBase('/')}
+          class="group inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+          aria-label="Ir al inicio — Lignum"
+        >
+          <span
+            class="grid size-11 shrink-0 place-items-center rounded-full border border-olive-500/30 bg-white/5 transition-colors duration-fast ease-out-expo group-hover:bg-white/10"
           >
-            {SITE.phone}
-          </a>
-        </li>
-        <li class="flex items-center gap-3">
-          <MessageCircle class="size-4 shrink-0 text-olive-300/70" aria-hidden="true" />
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
-          >
-            WhatsApp
-          </a>
-        </li>
-        <li class="flex items-center gap-3">
-          <Mail class="size-4 shrink-0 text-olive-300/70" aria-hidden="true" />
-          <a
-            href={`mailto:${SITE.email}`}
-            class="break-all text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
-          >
-            {SITE.email}
-          </a>
-        </li>
-        <li class="flex items-center gap-3">
-          <AtSign class="size-4 shrink-0 text-olive-300/70" aria-hidden="true" />
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-white/65 transition-colors duration-fast ease-out-expo hover:text-white"
-          >
-            {SITE.instagram}
-          </a>
-        </li>
-        <li class="flex items-start gap-3">
-          <Clock class="mt-0.5 size-4 shrink-0 text-olive-300/70" aria-hidden="true" />
-          <span class="text-white/65">
-            Lunes a viernes {SITE.hours.weekdays}
-            <br />
-            Sábado {SITE.hours.saturday}
+            <img
+              src={SITE.logo.path}
+              alt={SITE.logo.alt}
+              width="262"
+              height="261"
+              loading="eager"
+              decoding="async"
+              class="size-6 object-contain"
+            />
           </span>
-        </li>
-      </ul>
-    </section>
-  </div>
+          <span class="font-display text-2xl font-bold tracking-[-0.02em] text-white">
+            {SITE.brandLabel}
+          </span>
+        </a>
 
-  <div class="border-t border-white/10">
-    <div class="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-2 px-4 py-6 text-xs text-white/45 sm:flex-row sm:items-center sm:px-6 lg:px-8">
-      <p>
-        © {year}
-        {SITE.name}. Todos los derechos reservados.
-      </p>
-      <p class="flex items-center gap-1.5">
-        <MapPin class="size-3.5" aria-hidden="true" />
-        Santiago, Chile
-      </p>
+        {descripcion && (
+          <p class="mt-6 max-w-[46ch] text-sm leading-relaxed text-white/60">{descripcion}</p>
+        )}
+
+        {eslogan && (
+          <p class="mt-5 max-w-[40ch] font-display text-base italic text-olive-300">{eslogan}</p>
+        )}
+      </section>
+
+      <section aria-labelledby="footer-contacto" class="lg:col-span-4 lg:col-start-9">
+        <h2 id="footer-contacto" class="eyebrow eyebrow-on-dark">Contacto</h2>
+
+        <ul class="mt-6 space-y-4 text-sm">
+          <li>
+            <a
+              href={telHref}
+              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+            >
+              <Phone class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
+              {SITE.phone}
+            </a>
+          </li>
+
+          <li>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+            >
+              <MessageCircle class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
+              WhatsApp
+            </a>
+          </li>
+
+          <li>
+            <a
+              href={`mailto:${SITE.email}`}
+              class="inline-flex items-center gap-2 break-all text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+            >
+              <Mail class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
+              {SITE.email}
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+            >
+              <AtSign class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
+              {SITE.instagram}
+            </a>
+          </li>
+
+          <li class="flex items-start gap-2 text-white/55">
+            <Clock class="mt-0.5 size-4 shrink-0 text-olive-300" aria-hidden="true" />
+            <span>
+              {SITE.hours.weekdays} · {SITE.hours.saturday} · {SITE.hours.sunday}
+            </span>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <div
+      class="mt-10 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-12 md:items-start lg:gap-12"
+    >
+      <nav aria-label="Servicios" class="min-w-0 md:col-span-5 lg:col-span-5">
+        <h2 class="eyebrow eyebrow-on-dark">Servicios</h2>
+        <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-1">
+          {SERVICES.map((service) => (
+            <li>
+              <a
+                href={withBase(`/servicios#${service.slug}`)}
+                class="inline-flex items-center gap-2 py-1 text-sm text-white/65 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              >
+                <span class="size-1.5 shrink-0 rounded-full bg-olive-500" aria-hidden="true"></span>
+                {service.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav aria-label="Navegación" class="min-w-0 md:col-span-4 lg:col-span-3">
+        <h2 class="eyebrow eyebrow-on-dark">Sitio</h2>
+        <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-1">
+          {SITE.navigation.map((item) => (
+            <li>
+              <a
+                href={withBase(item.href)}
+                class="inline-block py-1 text-sm text-white/65 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div
+        class="flex min-w-0 flex-col gap-1 text-xs text-white/45 sm:flex-row sm:items-center sm:gap-4 md:col-span-3 md:flex-col md:items-end md:gap-1 md:text-right lg:col-span-4"
+      >
+        <p>© {year} {SITE.name}. Todos los derechos reservados.</p>
+        <p class="inline-flex items-center gap-1.5">
+          <MapPin class="size-3.5 text-olive-300" aria-hidden="true" />
+          Santiago, Chile
+        </p>
+      </div>
     </div>
   </div>
 </footer>
