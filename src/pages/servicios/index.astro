@@ -30,7 +30,7 @@ const total = String(SERVICES.length).padStart(2, '0');
   <section class="bg-background pt-14 md:pt-20">
     <Container>
       <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">
-        <div class="lg:col-span-7" data-reveal>
+        <div class="lg:col-span-7">
           <h1 class="max-w-[18ch] text-4xl font-bold md:text-5xl lg:text-6xl">
             Servicios de jardinería en Santiago
           </h1>
@@ -39,11 +39,7 @@ const total = String(SERVICES.length).padStart(2, '0');
             próximamente con su propia página de detalle. (PLACEHOLDER)
           </p>
         </div>
-        <div
-          class="lg:col-span-4 lg:col-start-9 lg:text-right"
-          data-reveal
-          data-reveal-delay="0.06"
-        >
+        <div class="lg:col-span-4 lg:col-start-9 lg:text-right">
           <p class="font-mono text-4xl tabular-nums text-forest-600">{total}</p>
           <p class="mt-1 text-sm text-stone-600">servicios disponibles</p>
         </div>

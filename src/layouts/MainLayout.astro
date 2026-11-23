@@ -3,6 +3,8 @@ import '@/styles/global.css';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import WhatsAppButton from '@/components/ui/WhatsAppButton.astro';
+import geistWoff2 from '@/assets/fonts/Geist-Variable.woff2?url';
+import satoshiWoff2 from '@/assets/fonts/Satoshi-Variable.woff2?url';
 import {
   buildPageTitle,
   buildCanonicalURL,
@@ -55,6 +57,8 @@ const ogImage = image ? new URL(image, SITE.url).toString() : '';
 
     {/* Preparación de reveals: solo si el usuario no pide movimiento reducido.
         Sin JS o con reduced-motion, el contenido queda visible por defecto. */}
+    <link rel="preload" href={geistWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={satoshiWoff2} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.classList.add('reveal-ready');

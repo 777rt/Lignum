@@ -77,15 +77,42 @@ export function revealOnScroll(
 /**
  * Activa las animaciones de todos los elementos `[data-reveal]`
  * incluidos dentro de un contenedor. Devuelve una función que detiene todo.
+ *
+ * La inicialización se difiere hasta que el navegador está ocioso (o tras
+ * `load`) para no competir con el LCP en el arranque móvil.
  */
 export function initReveal(container: HTMLElement | Document): () => void {
   const elements = Array.from(container.querySelectorAll<HTMLElement>('[data-reveal]'));
-  const cleanups = elements.map((element) => {
-    const delay = Number(element.dataset.revealDelay ?? 0);
-    return revealOnScroll(element, { delay });
-  });
+  if (elements.length === 0) return () => {};
+
+  let cancelled = false;
+  let cleanups: Array<() => void> = [];
+
+  const run = () => {
+    if (cancelled) return;
+    cleanups = elements.map((element) => {
+      const delay = Number(element.dataset.revealDelay ?? 0);
+      return revealOnScroll(element, { delay });
+    });
+  };
+
+  const schedule = () => {
+    if ('requestIdleCallback' in window) {
+      (
+        window as Window & {
+          requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number;
+        }
+      ).requestIdleCallback(run, { timeout: 1200 });
+    } else {
+      globalThis.setTimeout(run, 120);
+    }
+  };
+
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
 
   return () => {
+    cancelled = true;
     cleanups.forEach((cleanup) => cleanup());
   };
 }
