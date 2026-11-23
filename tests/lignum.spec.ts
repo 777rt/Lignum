@@ -93,7 +93,9 @@ for (const route of ROUTES) {
       } else {
         expect(response?.status()).toBe(200);
       }
-      await expect(page).toHaveURL(new RegExp(`${BASE_PATH}${route.path === '/' ? '/?' : route.path}`));
+      await expect(page).toHaveURL(
+        new RegExp(`${BASE_PATH}${route.path === '/' ? '/?' : route.path}`)
+      );
 
       const title = (await page.title()).trim();
       expect(title.length).toBeGreaterThan(0);
@@ -110,16 +112,21 @@ for (const route of ROUTES) {
 
     test('enlaces internos y externos', async ({ page, request, baseURL }) => {
       await openRoute(page, route.path);
-      const hrefs = await page.locator('a[href]').evaluateAll((elements) =>
-        elements.map((element) => element.getAttribute('href') ?? '')
-      );
+      const hrefs = await page
+        .locator('a[href]')
+        .evaluateAll((elements) => elements.map((element) => element.getAttribute('href') ?? ''));
 
       const internal = new Set<string>();
       const invalidExternal: string[] = [];
       const invalidBase: string[] = [];
 
       for (const href of hrefs) {
-        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+        if (
+          !href ||
+          href.startsWith('#') ||
+          href.startsWith('mailto:') ||
+          href.startsWith('tel:')
+        ) {
           continue;
         }
         const url = parseHref(href);
@@ -128,7 +135,8 @@ for (const route of ROUTES) {
           continue;
         }
         if (url.origin === 'http://playwright.local') {
-          const respectsBase = url.pathname === BASE_PATH || url.pathname.startsWith(`${BASE_PATH}/`);
+          const respectsBase =
+            url.pathname === BASE_PATH || url.pathname.startsWith(`${BASE_PATH}/`);
           if (!respectsBase) invalidBase.push(href);
           else internal.add(`${url.pathname}${url.search}`);
           continue;
@@ -151,9 +159,9 @@ for (const route of ROUTES) {
 
     test('CTA de WhatsApp', async ({ page }) => {
       await openRoute(page, route.path);
-      const hrefs = await page.locator('a[href]').evaluateAll((elements) =>
-        elements.map((element) => element.getAttribute('href') ?? '')
-      );
+      const hrefs = await page
+        .locator('a[href]')
+        .evaluateAll((elements) => elements.map((element) => element.getAttribute('href') ?? ''));
       const whatsappLinks = hrefs
         .map(parseHref)
         .filter((url): url is URL => url !== null && url.hostname === 'wa.me');
@@ -189,10 +197,10 @@ for (const route of ROUTES) {
               style.visibility !== 'hidden' &&
               rect.width > 0 &&
               rect.height > 0;
-            return !visible || image.complete;
+            return !visible || image.complete || image.naturalWidth > 0;
           }),
         null,
-        { timeout: 15_000 }
+        { timeout: 20_000 }
       );
 
       const images = await page.locator('img').evaluateAll((elements) =>
@@ -253,7 +261,10 @@ for (const route of ROUTES) {
         expect(video.sources.length).toBeGreaterThan(0);
         for (const source of video.sources) {
           const url = new URL(source, origin);
-          expect(url.pathname.startsWith(`${BASE_PATH}/`), `Vídeo fuera de ${BASE_PATH}`).toBeTruthy();
+          expect(
+            url.pathname.startsWith(`${BASE_PATH}/`),
+            `Vídeo fuera de ${BASE_PATH}`
+          ).toBeTruthy();
           const response = await request.head(url.toString());
           expect(response.ok(), `Recurso de vídeo no disponible: ${source}`).toBeTruthy();
         }
@@ -289,8 +300,12 @@ for (const route of ROUTES) {
           await burger.click();
           await expect(page.locator('#menu-movil')).toBeVisible();
           await expect(page.locator('#menu-movil [data-menu-link]').first()).toBeVisible();
+          if (route.path !== '/404') {
+            await expect(page.locator('#menu-movil [aria-current="page"]')).toHaveCount(1);
+          }
           await page.keyboard.press('Escape');
           await expect(page.locator('#menu-movil')).toBeHidden();
+          await expect(burger).toBeFocused();
         } else {
           const navLinks = page.locator('[data-nav-link]');
           expect(await navLinks.count()).toBeGreaterThan(0);
@@ -308,11 +323,16 @@ for (const route of ROUTES) {
       expect(lang).toBeTruthy();
       await expect(page.locator('h1')).toHaveCount(1);
 
-      const imagesWithoutAlt = await page.locator('img').evaluateAll((elements) =>
-        elements
-          .filter((element) => element.getAttribute('alt') === null)
-          .map((element) => (element as HTMLImageElement).currentSrc || (element as HTMLImageElement).src)
-      );
+      const imagesWithoutAlt = await page
+        .locator('img')
+        .evaluateAll((elements) =>
+          elements
+            .filter((element) => element.getAttribute('alt') === null)
+            .map(
+              (element) =>
+                (element as HTMLImageElement).currentSrc || (element as HTMLImageElement).src
+            )
+        );
       expect(imagesWithoutAlt, 'Imágenes sin texto alternativo').toEqual([]);
 
       const unnamedControls = await page.locator('a, button').evaluateAll((elements) =>

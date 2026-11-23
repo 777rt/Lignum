@@ -107,20 +107,24 @@ const whatsappHref = generateWhatsAppLink();
   <div id="menu-movil" data-menu hidden class="lg:hidden">
     <div class="border-t border-stone-200/70 bg-background px-4 pb-6 pt-2 sm:px-6">
       <ul>
-        {SITE.navigation.map((link, index) => (
-          <li class="border-b border-stone-200/70 last:border-b-0">
-            <a
-              href={withBase(link.href)}
-              data-menu-link
-              class="flex items-baseline gap-4 py-3.5 font-display text-lg font-medium text-stone-900"
-            >
-              <span class="font-mono text-[11px] tabular-nums text-stone-600">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {SITE.navigation.map((link, index) => {
+          const isCurrent = isCurrentPath(pathname, link.href);
+          return (
+            <li class="border-b border-stone-200/70 last:border-b-0">
+              <a
+                href={withBase(link.href)}
+                data-menu-link
+                aria-current={isCurrent ? 'page' : undefined}
+                class="flex items-baseline gap-4 py-3.5 font-display text-lg font-medium text-stone-900"
+              >
+                <span class="font-mono text-[11px] tabular-nums text-stone-600">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
       </ul>
       <div class="mt-5">
         <Button href="/contacto" size="md" class="w-full">
@@ -152,6 +156,16 @@ const whatsappHref = generateWhatsAppLink();
   const iconoAbierto = document.querySelector<HTMLElement>('[data-icono-abierto]');
   const iconoCerrado = document.querySelector<HTMLElement>('[data-icono-cerrado]');
 
+  const focusableSelector =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  function focusables(): HTMLElement[] {
+    if (!header || !menu || menu.hasAttribute('hidden')) return [];
+    return Array.from(header.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+      (el) => !el.closest('[hidden]') && el.getClientRects().length > 0
+    );
+  }
+
   function abrir(): void {
     if (!header || !menu || !boton) return;
     menu.removeAttribute('hidden');
@@ -159,37 +173,63 @@ const whatsappHref = generateWhatsAppLink();
     boton.setAttribute('aria-label', 'Cerrar menú de navegación');
     iconoAbierto?.classList.add('hidden');
     iconoCerrado?.classList.remove('hidden');
+    const [primero] = focusables().filter((el) => el !== boton);
+    (primero ?? boton).focus();
   }
 
-  function cerrar(): void {
+  function cerrar(devolverFoco = true): void {
     if (!header || !menu || !boton) return;
+    const estabaAbierto = !menu.hasAttribute('hidden');
     menu.setAttribute('hidden', '');
     boton.setAttribute('aria-expanded', 'false');
     boton.setAttribute('aria-label', 'Abrir menú de navegación');
     iconoAbierto?.classList.remove('hidden');
     iconoCerrado?.classList.add('hidden');
+    if (devolverFoco && estabaAbierto) boton.focus();
   }
 
   boton?.addEventListener('click', () => {
     const expandido = boton.getAttribute('aria-expanded') === 'true';
-    if (expandido) {
-      cerrar();
-    } else {
-      abrir();
-    }
+    if (expandido) cerrar();
+    else abrir();
   });
 
   menu?.addEventListener('click', (event) => {
     const target = event.target as HTMLElement | null;
-    if (target?.closest('[data-menu-link]')) cerrar();
+    if (target?.closest('[data-menu-link]')) cerrar(false);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!menu || menu.hasAttribute('hidden')) return;
+    const target = event.target as Node | null;
+    if (target && header && !header.contains(target)) cerrar();
   });
 
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') cerrar();
+    if (event.key === 'Escape' && menu && !menu.hasAttribute('hidden')) {
+      event.preventDefault();
+      cerrar();
+      return;
+    }
+    if (event.key !== 'Tab' || !menu || menu.hasAttribute('hidden')) return;
+    const items = focusables();
+    if (items.length === 0) return;
+    const primero = items[0];
+    const ultimo = items[items.length - 1];
+    const activo = document.activeElement as HTMLElement | null;
+    if (event.shiftKey) {
+      if (activo === primero || !activo || !header?.contains(activo)) {
+        event.preventDefault();
+        ultimo.focus();
+      }
+    } else if (activo === ultimo) {
+      event.preventDefault();
+      primero.focus();
+    }
   });
 
   // Al pasar a desktop, el panel móvil no debe quedarse abierto.
   window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
-    if (event.matches) cerrar();
+    if (event.matches) cerrar(false);
   });
 </script>

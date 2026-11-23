@@ -1,5 +1,5 @@
 ---
-import { Video } from '@lucide/astro';
+import { Pause, Play, Video } from '@lucide/astro';
 
 export type VideoGalleryItem = {
   /** Ruta del video dentro de /src/assets/videos o URL externa. */
@@ -38,18 +38,30 @@ const { items = [] } = Astro.props;
     {items.map((item) => (
       <figure class="overflow-hidden rounded-lg border border-stone-200/70 bg-surface">
         {item.src ? (
-          <video
-            class="aspect-video w-full bg-forest-950 object-contain"
-            muted
-            loop
-            preload="none"
-            playsinline
-            poster={item.poster}
-            data-scroll-video
-          >
-            <source src={item.src} type="video/mp4" />
-            Tu navegador no soporta video HTML5.
-          </video>
+          <div class="relative bg-forest-950" data-video-shell>
+            <video
+              class="aspect-video w-full bg-forest-950 object-contain"
+              muted
+              loop
+              preload="none"
+              playsinline
+              poster={item.poster}
+              data-scroll-video
+            >
+              <source src={item.src} type="video/mp4" />
+              Tu navegador no soporta video HTML5.
+            </video>
+            <button
+              type="button"
+              data-video-toggle
+              class="absolute bottom-3 right-3 inline-flex size-11 items-center justify-center rounded-full bg-stone-900/80 text-white shadow-md transition-colors duration-fast ease-out-expo hover:bg-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive-300"
+              aria-label={`Reproducir video: ${item.title}`}
+              aria-pressed="false"
+            >
+              <Play class="size-5" aria-hidden="true" data-video-icon-play />
+              <Pause class="hidden size-5" aria-hidden="true" data-video-icon-pause />
+            </button>
+          </div>
         ) : (
           <div class="flex aspect-video items-center justify-center bg-surface-muted text-sm font-medium text-stone-600">
             Video pendiente
@@ -66,46 +78,88 @@ const { items = [] } = Astro.props;
   </div>
 )}
 
-{/* Reproducción gestionada por scroll: cada video arranca solo al entrar en
-    pantalla, se pausa al salir (ahorro de batería/datos) y nunca reinicia.
-    `muted`+`loop`+`playsinline` están en el propio elemento; sin autoplay en el
-    markup para no descargar los mp4 al abrir la página (preload="none"). */}
+{/* Reproducción gestionada por scroll: arranca al entrar en pantalla y se
+    pausa al salir. `muted`+`loop`+`playsinline` evitan descarga temprana de mp4
+    (preload="none"). Botón manual accesible como fallback si autoplay falla. */}
 <script>
   import { prefersReducedMotion } from '@/utils/animation';
 
-  const videos = Array.from(
-    document.querySelectorAll<HTMLVideoElement>('video[data-scroll-video]')
-  );
+  const shells = Array.from(document.querySelectorAll<HTMLElement>('[data-video-shell]'));
 
-  if (videos.length > 0 && prefersReducedMotion()) {
-    /* Movimiento reducido: sin reproducción automática; se conserva el póster y
-       se habilitan los controles nativos como alternativa manual (sin botón
-       overlay). */
-    for (const video of videos) {
-      video.setAttribute('controls', '');
-    }
-  } else if (videos.length > 0) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const video = entry.target as HTMLVideoElement;
-          if (entry.isIntersecting) {
-            video.muted = true;
-            video.play().catch(() => {
-              /* Autoplay bloqueado (p. ej. ahorro de datos): queda visible el
-                 póster; no se muestra ningún botón de play. */
-            });
-          } else if (!video.paused) {
-            video.pause();
-          }
-        }
-      },
-      { threshold: 0.25 }
-    );
+  function syncButton(video: HTMLVideoElement, button: HTMLButtonElement): void {
+    const playing = !video.paused && !video.ended;
+    const title = video.closest('figure')?.querySelector('h3')?.textContent?.trim() || 'video';
+    button.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    button.setAttribute('aria-label', `${playing ? 'Pausar' : 'Reproducir'} video: ${title}`);
+    button
+      .querySelector<HTMLElement>('[data-video-icon-play]')
+      ?.classList.toggle('hidden', playing);
+    button
+      .querySelector<HTMLElement>('[data-video-icon-pause]')
+      ?.classList.toggle('hidden', !playing);
+  }
 
-    for (const video of videos) {
+  if (shells.length > 0) {
+    const reduced = prefersReducedMotion();
+
+    for (const shell of shells) {
+      const video = shell.querySelector<HTMLVideoElement>('video[data-scroll-video]');
+      const button = shell.querySelector<HTMLButtonElement>('[data-video-toggle]');
+      if (!video || !button) continue;
+
       video.muted = true;
-      observer.observe(video);
+      syncButton(video, button);
+
+      const toggle = async () => {
+        if (video.paused || video.ended) {
+          try {
+            await video.play();
+          } catch {
+            /* Bloqueo de reproducción: el botón sigue disponible para reintentar. */
+          }
+        } else {
+          video.pause();
+        }
+        syncButton(video, button);
+      };
+
+      button.addEventListener('click', () => {
+        void toggle();
+      });
+      video.addEventListener('play', () => syncButton(video, button));
+      video.addEventListener('pause', () => syncButton(video, button));
+
+      if (reduced) {
+        video.setAttribute('controls', '');
+        button.hidden = true;
+      }
+    }
+
+    if (!reduced) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const video = entry.target as HTMLVideoElement;
+            const button =
+              video.parentElement?.querySelector<HTMLButtonElement>('[data-video-toggle]');
+            if (entry.isIntersecting) {
+              video.muted = true;
+              void video.play().catch(() => {
+                /* Autoplay bloqueado: queda póster y control manual. */
+              });
+            } else if (!video.paused) {
+              video.pause();
+            }
+            if (button) syncButton(video, button);
+          }
+        },
+        { threshold: 0.25 }
+      );
+
+      for (const shell of shells) {
+        const video = shell.querySelector<HTMLVideoElement>('video[data-scroll-video]');
+        if (video) observer.observe(video);
+      }
     }
   }
 </script>
