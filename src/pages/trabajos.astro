@@ -30,27 +30,27 @@ const schema = [
  */
 const trabajos: GalleryItem[] = [
   {
-    src: imgInstalacion.src,
+    src: imgInstalacion,
     alt: 'Trabajador instalando rollos de césped sobre el terreno preparado junto a la terraza',
   },
   {
-    src: imgRollos.src,
+    src: imgRollos,
     alt: 'Trabajador acomodando rollos de césped junto a la vivienda',
   },
   {
-    src: imgAreaVerde.src,
+    src: imgAreaVerde,
     alt: 'Área verde recién cortada con líneas de corte, arbustos y un árbol junto a un muro',
   },
   {
-    src: imgJardineria.src,
+    src: imgJardineria,
     alt: 'Cantera de estrelichias con tierra nueva y soplador de hojas tras la limpieza del jardín',
   },
   {
-    src: imgJardin.src,
+    src: imgJardin,
     alt: 'Jardín residencial con césped recién cortado y perros sobre el pasto',
   },
   {
-    src: imgResultado.src,
+    src: imgResultado,
     alt: 'Césped recién instalado junto a un muro blanco y un cerco metálico',
   },
 ];
@@ -65,21 +65,25 @@ const trabajos: GalleryItem[] = [
 const videos: VideoGalleryItem[] = [
   {
     src: videoPalmera,
-    poster: posterPalmera.src,
+    poster: posterPalmera,
     title: 'Poda de palmera',
     description:
       'Vista en primera persona del podador: corte con motosierra sobre el tronco de una palmera, en lo alto.',
   },
   {
     src: videoTronco,
-    poster: posterTronco.src,
+    poster: posterTronco,
     title: 'Corte de tronco en pendiente',
     description: 'Corte con motosierra de un tronco de palmera derribado en una ladera.',
   },
 ];
 ---
 
-<MainLayout title="Trabajos" schema={schema}>
+<MainLayout
+  title="Trabajos"
+  description="Galería de trabajos de jardinería en Santiago: fotografías y videos reales de mantención, instalación de césped, jardinería y podas."
+  schema={schema}
+>
   <section class="bg-background pt-14 md:pt-20">
     <Container>
       <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end">

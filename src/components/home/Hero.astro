@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import imgHero from '@/assets/images/jardin-residencial-piscina-montanas.jpeg';
 import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
@@ -9,11 +10,13 @@ const serviciosHref = '/servicios';
 
 <section data-hero class="relative isolate overflow-hidden bg-forest-900 text-white">
   {/* Fotografía [hero principal], a sangre y centrada; el degradado actúa de scrim. */}
-  <img
-    src={imgHero.src}
+  <Image
+    src={imgHero}
     alt="Jardín con líneas de corte junto a una pileta, una casa y montañas al fondo"
-    width={imgHero.width}
-    height={imgHero.height}
+    widths={[480, 768, 1200, 1600]}
+    sizes="100vw"
+    format="webp"
+    quality={80}
     loading="eager"
     fetchpriority="high"
     decoding="async"

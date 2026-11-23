@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { Menu, X } from '@lucide/astro';
+import logoSymbol from '@/assets/icons/logo-lignum-symbol.png';
 import Button from '@/components/ui/Button.astro';
 import { SITE } from '@/data/site';
 import { generateWhatsAppLink } from '@/utils/whatsapp';
@@ -53,13 +55,16 @@ const whatsappHref = generateWhatsAppLink();
       class="flex shrink-0 items-center gap-2.5"
       aria-label={`Ir al inicio — ${SITE.brandLabel}`}
     >
-      <img
-        src={SITE.logo.path}
+      <Image
+        src={logoSymbol}
         alt={SITE.logo.alt}
+        widths={[64, 96, 128]}
+        sizes="32px"
+        format="webp"
+        quality={82}
         class="h-7 w-auto lg:h-8"
-        width="262"
-        height="261"
         loading="eager"
+        decoding="async"
       />
       <span class="font-display text-[1.0625rem] font-bold tracking-[-0.01em]">
         {SITE.brandLabel}

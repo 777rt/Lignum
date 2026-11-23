@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import imgTrabajo from '@/assets/images/instalacion-cesped-rollos-patio.jpeg';
 import MainLayout from '@/layouts/MainLayout.astro';
 import FinalCTA from '@/components/home/FinalCTA.astro';
@@ -19,7 +20,11 @@ const schema = [
 ];
 ---
 
-<MainLayout title="Nosotros" schema={schema}>
+<MainLayout
+  title="Nosotros"
+  description="Conoce a Lignum, equipo de jardinería en Santiago enfocado en trabajo claro, puntual y seguro para jardines, patios y áreas verdes."
+  schema={schema}
+>
   <section class="bg-background pt-14 md:pt-20">
     <Container>
       <div class="grid gap-8 border-b hairline pb-10 lg:grid-cols-12 lg:items-end lg:gap-12">
@@ -42,11 +47,13 @@ const schema = [
   <section class="bg-background py-12 md:py-16">
     <Container>
       {/* Imagen [nosotros], banda panorámica 21/9 (móvil 16/10): trabajo real en curso */}
-      <img
-        src={imgTrabajo.src}
+      <Image
+        src={imgTrabajo}
         alt="Trabajador instalando rollos de césped en un patio junto a la vivienda"
-        width={imgTrabajo.width}
-        height={imgTrabajo.height}
+        widths={[640, 960, 1280, 1600]}
+        sizes="100vw"
+        format="webp"
+        quality={80}
         loading="lazy"
         decoding="async"
         class="aspect-[16/10] w-full rounded-lg object-cover lg:aspect-[21/9]"

@@ -1,4 +1,6 @@
 ---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { Pause, Play, Video } from '@lucide/astro';
 
 export type VideoGalleryItem = {
@@ -9,7 +11,7 @@ export type VideoGalleryItem = {
   /** Descripción opcional. */
   description?: string;
   /** Imagen de respaldo (póster): se ve solo hasta que el video arranca. */
-  poster?: string;
+  poster?: ImageMetadata | string;
 };
 
 interface Props {
@@ -17,9 +19,25 @@ interface Props {
 }
 
 const { items = [] } = Astro.props;
+const resolvedItems = await Promise.all(
+  items.map(async (item) => ({
+    ...item,
+    posterSrc:
+      typeof item.poster === 'string' || !item.poster
+        ? item.poster
+        : (
+            await getImage({
+              src: item.poster,
+              width: 960,
+              format: 'webp',
+              quality: 78,
+            })
+          ).src,
+  }))
+);
 ---
 
-{items.length === 0 ? (
+{resolvedItems.length === 0 ? (
   <div class="grid gap-6 lg:grid-cols-12 lg:gap-8">
     <div class="image-slot aspect-video rounded-lg lg:col-span-8" aria-hidden="true">
       <span class="image-slot-label">
@@ -35,7 +53,7 @@ const { items = [] } = Astro.props;
   </div>
 ) : (
   <div class="grid gap-6 sm:grid-cols-2">
-    {items.map((item) => (
+    {resolvedItems.map((item) => (
       <figure class="overflow-hidden rounded-lg border border-stone-200/70 bg-surface">
         {item.src ? (
           <div class="relative bg-forest-950" data-video-shell>
@@ -45,7 +63,7 @@ const { items = [] } = Astro.props;
               loop
               preload="none"
               playsinline
-              poster={item.poster}
+              poster={item.posterSrc}
               data-scroll-video
             >
               <source src={item.src} type="video/mp4" />

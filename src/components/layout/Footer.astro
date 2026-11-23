@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { AtSign, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/astro';
+import logoSymbol from '@/assets/icons/logo-lignum-symbol.png';
 import { SITE } from '@/data/site';
 import { SERVICES } from '@/data/services';
 import { withBase } from '@/utils/links';
@@ -57,11 +59,13 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
           aria-label="Ir al inicio — Lignum"
         >
           <span class="grid size-11 shrink-0 place-items-center rounded-full border border-olive-500/30 bg-white/5 transition-colors duration-fast ease-out-expo group-hover:bg-white/10">
-            <img
-              src={SITE.logo.path}
+            <Image
+              src={logoSymbol}
               alt={SITE.logo.alt}
-              width="262"
-              height="261"
+              widths={[48, 96, 144]}
+              sizes="24px"
+              format="webp"
+              quality={82}
               loading="eager"
               decoding="async"
               class="size-6 object-contain"

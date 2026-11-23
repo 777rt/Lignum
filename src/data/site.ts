@@ -47,6 +47,8 @@ export type SiteConfig = {
   logo: {
     path: string;
     alt: string;
+    width: number;
+    height: number;
   };
   /** Colores corporativos. PLACEHOLDER: definir con la identidad real. */
   colors: {
@@ -109,6 +111,8 @@ export const SITE = {
   logo: {
     path: logoSymbol.src,
     alt: 'Logotipo de Lignum',
+    width: logoSymbol.width,
+    height: logoSymbol.height,
   },
   colors: {
     primary: '#2F5C2D',
