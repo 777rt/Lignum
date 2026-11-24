@@ -9,7 +9,7 @@ const serviciosHref = '/servicios';
 ---
 
 <section data-hero class="relative isolate overflow-hidden bg-forest-900 text-white">
-  {/* Fotografía [hero principal], a sangre y centrada; el degradado actúa de scrim. */}
+  {/* Fotografía [hero principal], a sangre y centrada. */}
   <Image
     src={imgHero}
     alt="Jardín con líneas de corte junto a una pileta, una casa y montañas al fondo"
@@ -22,16 +22,37 @@ const serviciosHref = '/servicios';
     decoding="async"
     class="absolute inset-0 -z-10 h-full w-full object-cover"
   />
-  <div
-    class="absolute inset-0 -z-10"
-    style="background:
-      linear-gradient(to top, rgb(15 26 18 / 0.88) 0%, rgb(15 26 18 / 0.55) 42%, rgb(15 26 18 / 0.28) 100%),
-      radial-gradient(110% 85% at 78% 12%, #274a26 0%, transparent 58%),
-      #162318;"
+  {/* Ondas de relieve: cuatro franjas boscosas que reemplazan al antiguo scrim degradado. */}
+  <svg
+    class="pointer-events-none absolute inset-0 z-0 h-full w-full"
+    viewBox="0 0 1440 900"
+    preserveAspectRatio="none"
     aria-hidden="true"
-  ></div>
+    focusable="false"
+  >
+    <path
+      fill="var(--color-forest-700)"
+      opacity="0.42"
+      d="M0 186c214-72 398 34 610-8 208-41 354-128 548-84 182 42 226 128 282 160V900H0Z"
+    />
+    <path
+      fill="var(--color-forest-800)"
+      opacity="0.68"
+      d="M0 330c196-62 366 20 556-14 194-35 326-118 506-80 168 35 278 114 378 132V900H0Z"
+    />
+    <path
+      fill="var(--color-forest-900)"
+      opacity="0.86"
+      d="M0 492c188-48 354 30 540 0 188-30 318-104 490-72 158 30 284 96 410 112V900H0Z"
+    />
+    <path
+      fill="var(--color-forest-950)"
+      opacity="0.94"
+      d="M0 668c212-40 400 30 600 2 184-26 330-84 492-56 150 26 276 76 348 88V900H0Z"
+    />
+  </svg>
 
-  <Container class="relative flex min-h-[80svh] flex-col justify-center pt-16 pb-14 md:pt-20 md:pb-16">
+  <Container class="relative z-10 flex min-h-[80svh] flex-col justify-center pt-16 pb-14 md:pt-20 md:pb-16">
     <div class="max-w-[46rem]">
       <p class="eyebrow eyebrow-on-dark">Mantención, poda y paisajismo</p>
 
