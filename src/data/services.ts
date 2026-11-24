@@ -4,15 +4,17 @@ import imgDesmalezadoCaseta from '@/assets/images/desmalezado/desmalezado-maleza
 import imgDesmalezadoMalezas from '@/assets/images/desmalezado/desmalezado-malezas-desbrozadora.jpeg';
 import imgDesmalezadoMuro from '@/assets/images/desmalezado/desmalezado-malezas-altas-muro.jpeg';
 import imgDesmalezadoResiduos from '@/assets/images/desmalezado/desmalezado-residuos-retirados.jpeg';
-import imgJardinResidencial from '@/assets/images/general/jardin-residencial-piscina-montanas.jpeg';
 import imgJardines from '@/assets/images/mantencion-de-areas-verdes-y-jardines/mantencion-area-verde-lineas-corte.jpeg';
 import imgLimpiezaCamino from '@/assets/images/desmalezado/limpieza-camino-placas-residuos.jpeg';
 import imgMalezasFlores from '@/assets/images/desmalezado/malezas-flores-moradas-muro.jpeg';
+import imgMantencionPatio from '@/assets/images/mantencion-de-areas-verdes-y-jardines/mantencion-patio-estrecho-residuos.jpeg';
 import imgPaisajismo from '@/assets/images/paisajismo/paisajismo-sendero-piedras.jpeg';
 import imgPaisajismoVertical from '@/assets/images/paisajismo/paisajismo-sendero-piedras-vertical.jpeg';
 import imgPatioCitrico from '@/assets/images/mantencion-de-areas-verdes-y-jardines/patio-citrico-cesped-arbustos.jpeg';
+import imgPatioLateral from '@/assets/images/mantencion-de-areas-verdes-y-jardines/patio-lateral-cesped-seco.jpeg';
 import imgPatioMalezas from '@/assets/images/desmalezado/patio-malezas-manguera-enredada.jpeg';
 import imgPatioPosterior from '@/assets/images/mantencion-de-areas-verdes-y-jardines/patio-posterior-arboles-cesped.jpeg';
+import imgPodaPalmeraPoster from '@/assets/images/podas/video-poda-palmera-poster.jpg';
 import imgPodas from '@/assets/images/podas/poda-palmera-motosierra-tronco.jpeg';
 import imgPodasAltura from '@/assets/images/podas/poda-palmera-arbolista-altura.jpeg';
 import imgResultadoCesped from '@/assets/images/paisajismo/resultado-instalacion-cesped.jpeg';
@@ -50,23 +52,27 @@ export const SERVICES: Service[] = [
     description: `Realizamos la mantención de jardines y áreas verdes en ${SITE.coverage}: corte de césped, orillado, fertilización, control de malezas y reposición de plantas. Adaptamos la intervención a cada espacio y dejamos el área ordenada, con los residuos vegetales retirados al terminar el trabajo.`,
     icon: 'sprout',
     image: imgJardines,
-    imageAlt: 'Área verde con líneas de corte recientes junto a un muro y un árbol',
+    imageAlt: 'Área verde con líneas de corte recientes junto a un muro',
     gallery: [
       {
-        src: imgResultadoCesped,
-        alt: 'Césped recién instalado junto a un muro blanco y un cerco metálico',
-      },
-      {
         src: imgPatioCitrico,
-        alt: 'Patio con árbol cítrico, césped y arbustos',
+        alt: 'Patio con árbol cítrico y césped',
       },
       {
         src: imgPatioPosterior,
-        alt: 'Patio posterior con árboles frutales, césped y arbustos',
+        alt: 'Patio posterior con árboles y césped',
       },
       {
         src: imgCespedRastrillo,
-        alt: 'Césped desparejo siendo alisado con un rastrillo',
+        alt: 'Césped desparejo siendo alisado con rastrillo',
+      },
+      {
+        src: imgPatioLateral,
+        alt: 'Patio lateral con césped seco',
+      },
+      {
+        src: imgMantencionPatio,
+        alt: 'Patio estrecho durante la mantención',
       },
     ],
     includes: [
@@ -85,15 +91,15 @@ export const SERVICES: Service[] = [
     description: `Ejecutamos desmalezado en patios, antejardines, muros y caminos de ${SITE.coverage}. Retiramos maleza y vegetación no deseada, limpiamos el terreno y dejamos el material vegetal retirado para su disposición, según lo acordado con el cliente.`,
     icon: 'trees',
     image: imgDesmalezadoResiduos,
-    imageAlt: 'Residuos vegetales retirados tras la limpieza de un terreno',
+    imageAlt: 'Residuos vegetales retirados tras la limpieza',
     gallery: [
       {
         src: imgDesmalezadoMalezas,
-        alt: 'Trabajador desbrozando maleza alta junto a una caseta',
+        alt: 'Desbroce de maleza junto a una caseta',
       },
       {
         src: imgDesmalezadoMuro,
-        alt: 'Maleza alta junto a un muro antes de la limpieza',
+        alt: 'Maleza alta junto a un muro',
       },
       {
         src: imgDesmalezadoCaseta,
@@ -101,7 +107,7 @@ export const SERVICES: Service[] = [
       },
       {
         src: imgLimpiezaCamino,
-        alt: 'Camino limpio con placas y residuos vegetales retirados',
+        alt: 'Camino limpio con placas y residuos retirados',
       },
       {
         src: imgMalezasFlores,
@@ -109,7 +115,7 @@ export const SERVICES: Service[] = [
       },
       {
         src: imgPatioMalezas,
-        alt: 'Patio con maleza y una manguera enredada en el suelo',
+        alt: 'Patio con maleza y manguera en el suelo',
       },
     ],
     includes: [
@@ -127,19 +133,19 @@ export const SERVICES: Service[] = [
     description: `Diseñamos y ejecutamos intervenciones de paisajismo en ${SITE.coverage}: preparación de suelo, instalación de césped, senderos y plantación de arbustos y gramíneas. Seleccionamos especies adecuadas al espacio y coordinamos la entrega del terreno listo para su uso.`,
     icon: 'pencil-ruler',
     image: imgPaisajismo,
-    imageAlt: 'Sendero de piedras redondas entre arbustos y gramíneas junto a la vivienda',
+    imageAlt: 'Sendero de piedras entre arbustos y gramíneas',
     gallery: [
       {
         src: imgPaisajismoVertical,
-        alt: 'Sendero de piedras entre plantas visto en formato vertical',
+        alt: 'Sendero de piedras visto en formato vertical',
       },
       {
         src: imgTerrenoPreparado,
-        alt: 'Terreno rastrillado y preparado con una pala y una bolsa de sustrato',
+        alt: 'Terreno rastrillado y preparado con pala y sustrato',
       },
       {
         src: imgTerrenoAmplio,
-        alt: 'Área amplia de terreno preparada para trabajo de paisajismo',
+        alt: 'Área amplia de terreno preparada para paisajismo',
       },
       {
         src: imgRollosVivienda,
@@ -151,7 +157,11 @@ export const SERVICES: Service[] = [
       },
       {
         src: imgCespedNeumaticos,
-        alt: 'Césped desparejo con marcas de neumáticos antes de la reparación',
+        alt: 'Césped desparejo con marcas de neumáticos',
+      },
+      {
+        src: imgResultadoCesped,
+        alt: 'Césped recién instalado junto a un muro',
       },
     ],
     includes: [
@@ -169,15 +179,15 @@ export const SERVICES: Service[] = [
     description: `Realizamos podas de árboles, palmeras, arbustos y cercos vivos en ${SITE.coverage}. El trabajo considera el uso de equipamiento de seguridad, el corte controlado de las ramas y la limpieza del área, con retiro del material vegetal según lo acordado.`,
     icon: 'scissors',
     image: imgPodas,
-    imageAlt: 'Podador arborizado cortando el tronco de una palmera con motosierra',
+    imageAlt: 'Podador cortando el tronco de una palmera con motosierra',
     gallery: [
       {
         src: imgPodasAltura,
-        alt: 'Trabajador arborizado en una palmera con equipo de seguridad y cuerda',
+        alt: 'Trabajador arborizado en una palmera con equipo de seguridad',
       },
       {
-        src: imgJardinResidencial,
-        alt: 'Jardín residencial con césped cortado, pileta y montañas al fondo',
+        src: imgPodaPalmeraPoster,
+        alt: 'Poda de palmera con motosierra en altura',
       },
     ],
     includes: [
@@ -195,7 +205,7 @@ export const SERVICES: Service[] = [
     description: `Realizamos tala y extracción controlada de árboles en ${SITE.coverage}. Coordinamos la intervención, cortamos y bajamos el árbol por tramos cuando el espacio lo requiere y retiramos los restos de madera y follaje según lo acordado con el cliente.`,
     icon: 'leaf',
     image: imgTala,
-    imageAlt: 'Tronco de palmera derribado en una ladera siendo cortado con motosierra',
+    imageAlt: 'Tronco de palmera derribado en una ladera siendo cortado',
     gallery: [],
     includes: [
       'Evaluación previa del árbol y del entorno',
