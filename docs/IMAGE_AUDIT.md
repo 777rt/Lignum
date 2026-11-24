@@ -123,7 +123,7 @@ Candidatas evaluadas (y por qué no se auto-asignan):
 
 ## 5. Recomendaciones de optimización (compatibles con Astro, sin tocar config en esta fase)
 
-1. **Pipeline existente ya es correcto:** todas las fotos se importan como módulos (`@/assets/images/…`) y se renderizan con `<img src={img.src} width height loading decoding>`; Astro emite variantes con hash en `/_astro/`. No migrar a rutas públicas.
+1. **Pipeline existente ya es correcto:** todas las fotos se importan como módulos (`@/assets/images/<catalogo>/…`) y se renderizan con `<img src={img.src} width height loading decoding>`; Astro emite variantes con hash en `/_astro/`. No migrar a rutas públicas.
 2. **`loading`/prioridad:** ya adecuado (hero `eager` + `fetchpriority="high"`; resto `lazy`). Preservar.
 3. **Anchos de servicio:** si se ajusta `astro.config.ts` en fase de implementación, declarar `image.experimentalResponsiveWidths` o `service.config.widths` acorde a los slots reales (tarjeta 16/10 ~700 px útiles, galería ~800 px, hero ~1600 px) para limitar el número de variantes generadas.
 4. **Calidad:** valorar `image.quality` ~75–80 para balance visual/peso; no bajar de 70 (fotografía natural, textura de follaje — DESIGN §8.1).
@@ -139,11 +139,11 @@ Candidatas evaluadas (y por qué no se auto-asignan):
 
 Recomendaciones P3:
 
-| Vídeo                              | Acción propuesta                                                                                                                                                                     | Archivos implicados                                                                                                                                                      |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `poda-tronco-ladera.mp4` (21,9 MB) | Re-codificar H.264 (CRF ~26–28, preset slow), escala máx. 1280 px de ancho, `+faststart`, sin audio (verificar 0 streams). Objetivo ≤ 8 MB sin pérdida perceptible en `aspect-video` | `src/assets/videos/poda-tronco-ladera.mp4` (sustitución del archivo en fase de implementación), `src/pages/trabajos.astro` (sin cambio de ruta si se reemplaza in place) |
-| `poda-palmera.mp4` (3,7 MB)        | Opcional: alinear a 24–30 fps y máx. 720–832 px si se desea < 2 MB                                                                                                                   | ídem                                                                                                                                                                     |
-| Ambos                              | Mantener pósters; verificar tras recodificar que sigan siendo fotogramas representativos (regenerar póster si cambia el primer fotograma útil)                                       | `video-poda-*-poster.jpg`                                                                                                                                                |
+| Vídeo                              | Acción propuesta                                                                                                                                                                     | Archivos implicados                                                                                                                                                                      |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `poda-tronco-ladera.mp4` (21,9 MB) | Re-codificar H.264 (CRF ~26–28, preset slow), escala máx. 1280 px de ancho, `+faststart`, sin audio (verificar 0 streams). Objetivo ≤ 8 MB sin pérdida perceptible en `aspect-video` | `src/assets/videos/tala-de-arboles/poda-tronco-ladera.mp4` (sustitución del archivo en fase de implementación), `src/pages/trabajos.astro` (sin cambio de ruta si se reemplaza in place) |
+| `poda-palmera.mp4` (3,7 MB)        | Opcional: alinear a 24–30 fps y máx. 720–832 px si se desea < 2 MB                                                                                                                   | ídem                                                                                                                                                                                     |
+| Ambos                              | Mantener pósters; verificar tras recodificar que sigan siendo fotogramas representativos (regenerar póster si cambia el primer fotograma útil)                                       | `video-poda-*-poster.jpg`                                                                                                                                                                |
 
 ---
 
@@ -180,7 +180,7 @@ Recomendaciones P3:
 
 ### P3 — Vídeos y extras
 
-8. Recodificar `poda-tronco-ladera.mp4` (§6). _Archivo:_ `src/assets/videos/poda-tronco-ladera.mp4`.
+8. Recodificar `poda-tronco-ladera.mp4` (§6). _Archivo:_ `src/assets/videos/tala-de-arboles/poda-tronco-ladera.mp4`.
 9. Evaluar recorte de la rama de `mantencion-cesped-pov-corte-perro` si se integra en galería 16/10 (object-position).
 10. Revisar en dispositivo real la reproducción móvil de ambos vídeos (autoplay solo con `muted`+`playsinline`, ya implementado).
 

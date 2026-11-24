@@ -499,7 +499,7 @@ que permita sonido. **Reproducción:** el video es el elemento visual (sin botó
 
 **Arquitectura preparada para fotos reales (ya funciona):**
 
-- **Servicios:** `Service.image?: ImageMetadata` + `imageAlt?` en `services.ts`. `ServiceCard` ya renderiza `<img>` con `src/width/height/loading=lazy` si `service.image` está definido; sin él, placeholder `image-slot aspect-[16/10]`. **Para agregar una foto:** importarla en `services.ts` (`import foto from '@/assets/images/x.jpg'`) y asignar `image: foto, imageAlt: '...'`.
+- **Servicios:** `Service.image?: ImageMetadata` + `imageAlt?` en `services.ts`. `ServiceCard` ya renderiza `<img>` con `src/width/height/loading=lazy` si `service.image` está definido; sin él, placeholder `image-slot aspect-[16/10]`. **Para agregar una foto:** importarla en `services.ts` (`import foto from '@/assets/images/<catalogo>/x.jpg'`) y asignar `image: foto, imageAlt: '...'`.
 - **Galería:** `GalleryItem.src?` / `VideoGalleryItem.src?` — con `items=[]` muestra estado vacío; con items sin `src` muestra slot.
 - **Regla del proyecto (DESIGN §8.3):** no agregar imágenes externas aleatorias; aspect ratios reservados para evitar CLS; alt obligatorio.
 
@@ -736,7 +736,7 @@ _Ninguno que impida funcionar el sitio actualmente._
 
 ```ts
 // src/data/services.ts
-import paisajismoFoto from '@/assets/images/paisajismo.jpg';
+import paisajismoFoto from '@/assets/images/<catalogo>/x.jpg';
 // ...en el servicio:
 image: paisajismoFoto,
 imageAlt: 'Descripción real de la foto (obligatoria)',

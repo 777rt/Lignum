@@ -1,14 +1,14 @@
 ---
-import imgInstalacion from '@/assets/images/instalacion-cesped-rollos-trabajador.jpeg';
-import imgRollos from '@/assets/images/instalacion-cesped-rollos-vivienda.jpeg';
-import imgAreaVerde from '@/assets/images/mantencion-area-verde-lineas-corte.jpeg';
-import imgJardineria from '@/assets/images/jardineria-limpieza-cantera-estrelicias.jpeg';
-import imgJardin from '@/assets/images/jardin-cesped-cortado-perros.jpeg';
-import imgResultado from '@/assets/images/resultado-instalacion-cesped.jpeg';
-import posterPalmera from '@/assets/images/video-poda-palmera-poster.jpg';
-import posterTronco from '@/assets/images/video-poda-tronco-ladera-poster.jpg';
-import videoPalmera from '@/assets/videos/poda-palmera.mp4';
-import videoTronco from '@/assets/videos/poda-tronco-ladera.mp4';
+import imgInstalacion from '@/assets/images/paisajismo/instalacion-cesped-rollos-trabajador.jpeg';
+import imgRollos from '@/assets/images/paisajismo/instalacion-cesped-rollos-vivienda.jpeg';
+import imgAreaVerde from '@/assets/images/mantencion-de-areas-verdes-y-jardines/mantencion-area-verde-lineas-corte.jpeg';
+import imgJardineria from '@/assets/images/mantencion-de-areas-verdes-y-jardines/jardineria-limpieza-cantera-estrelicias.jpeg';
+import imgJardin from '@/assets/images/mantencion-de-areas-verdes-y-jardines/jardin-cesped-cortado-perros.jpeg';
+import imgResultado from '@/assets/images/paisajismo/resultado-instalacion-cesped.jpeg';
+import posterPalmera from '@/assets/images/podas/video-poda-palmera-poster.jpg';
+import posterTronco from '@/assets/images/tala-de-arboles/video-poda-tronco-ladera-poster.jpg';
+import videoPalmera from '@/assets/videos/podas/poda-palmera.mp4';
+import videoTronco from '@/assets/videos/tala-de-arboles/poda-tronco-ladera.mp4';
 import MainLayout from '@/layouts/MainLayout.astro';
 import Gallery, { type GalleryItem } from '@/components/gallery/Gallery.astro';
 import VideoGallery, { type VideoGalleryItem } from '@/components/gallery/VideoGallery.astro';
@@ -58,7 +58,7 @@ const trabajos: GalleryItem[] = [
 
 /**
  * Selección editorial de video: 2 piezas con trabajo real en ejecución y
- * composición estable. Las copias en /src/assets/videos están generadas sin
+ * composición estable. Las copias en /src/assets/videos/podas y /src/assets/videos/tala-de-arboles están generadas sin
  * pista de audio (imposible reproducir sonido); el componente los muestra en
  * loop silenciado y arranca/pausa según visibilidad (IntersectionObserver),
  * con póster solo como respaldo de carga.

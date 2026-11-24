@@ -72,7 +72,7 @@
 
 ### P1-4. Vídeo pesado pendiente de optimización
 
-- `src/assets/videos/poda-tronco-ladera.mp4` = **20,93 MB** (medido en disco; ~21,9 MB según auditoría previa por diferencia de unidades). `poda-palmera.mp4` = 3,52 MB.
+- `src/assets/videos/tala-de-arboles/poda-tronco-ladera.mp4` = **20,93 MB** (medido en disco; ~21,9 MB según auditoría previa por diferencia de unidades). `poda-palmera.mp4` = 3,52 MB.
 - FFmpeg no estaba disponible en la sesión anterior; no se reintentó en esta auditoría. El comportamiento actual de `VideoGallery.astro` (`muted`, `loop`, `playsinline`, `preload="none"`, IntersectionObserver, controles solo con reduced-motion) debe preservarse.
 
 ---
