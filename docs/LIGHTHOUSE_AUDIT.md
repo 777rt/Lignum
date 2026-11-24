@@ -4,6 +4,8 @@
 > **Fecha de ejecuci?n:** 2026-11-23 (ejecuci?n local secuencial).
 > **Commit auditado:** `1f18442 perf(media): optimiza video poda-tronco-ladera, limpia fuentes y mejora a11y` (sobre `dist/` generado con `npm run build`).
 
+**Estado vigente:** esta medición corresponde al commit `1f18442` y no al estado actual. Después se cargaron los datos reales de contacto, se ajustaron canonical y JSON-LD al base path y se actualizaron accesibilidad y pruebas. El Healthy de Lighthouse puede diferir. La validación vigente es la suite de Playwright en `tests/lignum.spec.ts` y los datos en `PROJECT_STATUS.md`.
+
 ## 1. Metodolog?a y entorno real
 
 | Par?metro         | Valor                                                                                                                 |

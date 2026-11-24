@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { AtSign, Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/astro';
+import { Clock, Mail, MapPin, MessageCircle, Phone } from '@lucide/astro';
 import logoSymbol from '@/assets/icons/logo-lignum-symbol.png';
 import { SITE } from '@/data/site';
 import { SERVICES } from '@/data/services';
@@ -51,7 +51,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
         <a
           href={withBase('/')}
           class="group inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
-          aria-label="Ir al inicio — Lignum"
+          aria-label="Ir al inicio, Lignum"
         >
           <span class="grid size-11 shrink-0 place-items-center rounded-full border border-olive-500/30 bg-white/5 transition-colors duration-fast ease-out-expo group-hover:bg-white/10">
             <Image
@@ -72,7 +72,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
         </a>
 
         {descripcion && (
-          <p class="mt-6 max-w-[46ch] text-sm leading-relaxed text-white/60">{descripcion}</p>
+          <p class="mt-6 max-w-[46ch] text-sm leading-relaxed text-white/80">{descripcion}</p>
         )}
 
         {eslogan && (
@@ -89,7 +89,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
           <li>
             <a
               href={telHref}
-              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              class="inline-flex items-center gap-2 text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
             >
               <Phone class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
               {SITE.phone}
@@ -101,7 +101,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              class="inline-flex items-center gap-2 text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
             >
               <MessageCircle class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
               WhatsApp
@@ -111,7 +111,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
           <li>
             <a
               href={`mailto:${SITE.email}`}
-              class="inline-flex items-center gap-2 break-all text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              class="inline-flex items-center gap-2 break-all text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
             >
               <Mail class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
               {SITE.email}
@@ -123,14 +123,27 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
               href={SITE.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+              aria-label="Instagram de Lignum"
+              class="inline-flex items-center gap-2 text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
             >
-              <AtSign class="size-4 shrink-0 text-olive-300" aria-hidden="true" />
-              {SITE.instagram}
+              <svg
+                class="size-4 shrink-0 text-olive-300"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
             </a>
           </li>
 
-          <li class="flex items-start gap-2 text-white/55">
+          <li class="flex items-start gap-2 text-white/80">
             <Clock class="mt-0.5 size-4 shrink-0 text-olive-300" aria-hidden="true" />
             <span>
               {SITE.hours.days}: {SITE.hours.range}
@@ -148,7 +161,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
             <li>
               <a
                 href={withBase(`/servicios/${service.slug}`)}
-                class="inline-flex items-center gap-2 py-1 text-sm text-white/65 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+                class="inline-flex items-center gap-2 py-1 text-sm text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
               >
                 <span class="size-1.5 shrink-0 rounded-full bg-olive-500" aria-hidden="true"></span>
                 {service.name}
@@ -165,7 +178,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
             <li>
               <a
                 href={withBase(item.href)}
-                class="inline-block py-1 text-sm text-white/65 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+                class="inline-block py-1 text-sm text-white/80 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
               >
                 {item.label}
               </a>
@@ -174,7 +187,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
         </ul>
       </nav>
 
-      <div class="flex min-w-0 flex-col gap-1 text-xs text-white/45 sm:flex-row sm:items-center sm:gap-4 md:col-span-3 md:flex-col md:items-end md:gap-1 md:text-right lg:col-span-4">
+      <div class="flex min-w-0 flex-col gap-1 text-xs text-white/75 sm:flex-row sm:items-center sm:gap-4 md:col-span-3 md:flex-col md:items-end md:gap-1 md:text-right lg:col-span-4">
         <p>
           © {year} {SITE.name}. Todos los derechos reservados.
         </p>

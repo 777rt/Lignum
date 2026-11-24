@@ -1,27 +1,24 @@
-# Web para empresa de jardinería — Santiago (PLACEHOLDER)
+# Lignum
 
-Sitio web estático para una PYME de jardinería con operación en Santiago de
-Chile. Orientado a máximo rendimiento, SEO local y conversión a WhatsApp.
+Sitio web estático para Construcción y Mantenciones de Espacios Verdes Limitada, con operación en la Región Metropolitana y sus alrededores. Prioriza rendimiento, SEO local y conversión a WhatsApp.
 
-> ⚠️ **Fase actual: arquitectura inicial.** Todo el contenido visible es
-> provisional y está marcado como `PLACEHOLDER`. No hay información real de la
-> empresa, ni testimonios, ni fotografías.
+> Estado vigente: datos comerciales reales cargados, 12 rutas HTML y cinco fichas de servicio publicadas. El dominio `.cl` y la decisión final de `base` siguen pendientes. El Hero está aprobado y no debe modificarse.
 
 ## Stack
 
-| Tecnología                                     | Uso                                             |
-| ---------------------------------------------- | ----------------------------------------------- |
-| [Astro](https://astro.build)                   | Framework estático (SSG)                        |
-| TypeScript                                     | Tipado estricto                                 |
-| [Tailwind CSS v4](https://tailwindcss.com)     | Estilos (utility-first)                         |
-| [@lucide/astro](https://lucide.dev/docs/astro) | Iconos                                          |
-| [GSAP](https://gsap.com)                       | Animaciones (carga diferida, solo donde se usa) |
-| ESLint + eslint-plugin-astro                   | Linting                                         |
-| Prettier + prettier-plugin-astro               | Formato                                         |
-| @astrojs/sitemap                               | Sitemap XML                                     |
+| Tecnología                                     | Uso                                    |
+| ---------------------------------------------- | -------------------------------------- |
+| [Astro](https://astro.build)                   | Framework estático (SSG)               |
+| TypeScript                                     | Tipado estricto                        |
+| [Tailwind CSS v4](https://tailwindcss.com)     | Estilos utility-first                  |
+| [@lucide/astro](https://lucide.dev/docs/astro) | Iconos SVG                             |
+| [GSAP](https://gsap.com)                       | Reveals con carga diferida             |
+| ESLint + eslint-plugin-astro                   | Linting                                |
+| Prettier + prettier-plugin-astro               | Formato                                |
+| @astrojs/sitemap                               | Sitemap XML                            |
+| Playwright                                     | Pruebas end-to-end en tres navegadores |
 
-No se usan React, frameworks de componentes, backend, base de datos ni CMS:
-el sitio se compila a HTML estático.
+No se usan React, Vue, Svelte, backend, base de datos ni CMS. El sitio se compila a HTML estático.
 
 ## Requisitos
 
@@ -36,105 +33,117 @@ npm install
 
 ## Comandos
 
-| Comando                | Descripción                                       |
-| ---------------------- | ------------------------------------------------- |
-| `npm run dev`          | Servidor de desarrollo en `http://localhost:4321` |
-| `npm run build`        | Build de producción en `dist/`                    |
-| `npm run preview`      | Previsualiza el build local                       |
-| `npm run check`        | Type-check de Astro (también revisa .astro)       |
-| `npm run lint`         | ESLint (errores convierten el comando en falla)   |
-| `npm run lint:fix`     | ESLint con autocorrección                         |
-| `npm run format`       | Prettier: formatea todo el proyecto               |
-| `npm run format:check` | Prettier: verifica el formato                     |
+| Comando                       | Descripción                                               |
+| ----------------------------- | --------------------------------------------------------- |
+| `npm run dev`                 | Servidor de desarrollo en `http://localhost:4321/Lignum/` |
+| `npm run build`               | Build de producción en `dist/`                            |
+| `npm run preview`             | Previsualiza el build local                               |
+| `npm run check`               | Type-check de Astro, incluye archivos `.astro`            |
+| `npm run lint`                | ESLint con `--max-warnings=0`                             |
+| `npm run lint:fix`            | ESLint con autocorrección                                 |
+| `npm run format`              | Prettier: formatea todo el proyecto                       |
+| `npm run format:check`        | Prettier: verifica el formato                             |
+| `npm test`                    | Playwright en Chromium, Firefox y WebKit                  |
+| `npm test -- --reporter=line` | Suite completa con reporte en línea                       |
 
 ## Estructura de carpetas
 
-```
+```text
 src/
-├── assets/                 # Imágenes, videos e íconos locales (use Astro <Image>)
-│   ├── images/
-│   ├── videos/
-│   └── icons/
+├── assets/
+│   ├── fonts/              # Satoshi, Geist y Geist Mono self-hosted
+│   ├── icons/              # Símbolo del logo
+│   ├── images/             # Fotos por catálogo y pósters de video
+│   │   ├── general/
+│   │   ├── desmalezado/
+│   │   ├── mantencion-de-areas-verdes-y-jardines/
+│   │   ├── paisajismo/
+│   │   ├── podas/
+│   │   └── tala-de-arboles/
+│   └── videos/             # MP4 por catálogo
 ├── components/
-│   ├── layout/             # Navbar, Footer
+│   ├── layout/             # Navbar y Footer
 │   ├── ui/                 # Button, Container, SectionTitle, WhatsAppButton
 │   ├── home/               # Hero, ServicesPreview, FeaturedWork, AboutPreview,
 │   │                       # Testimonials, FinalCTA
-│   ├── services/           # ServiceCard, ServiceGrid
-│   ├── gallery/            # Gallery, VideoGallery
+│   ├── services/           # ServiceCard y ServiceGrid en Astro
+│   ├── gallery/            # Gallery y VideoGallery en Astro
 │   └── quote/              # QuoteForm
-├── data/                   # Fuente de verdad del sitio
-│   ├── site.ts             # Datos de la empresa (PLACEHOLDER)
-│   └── services.ts         # Catálogo de servicios
+├── data/
+│   ├── site.ts             # Datos confirmados de la empresa
+│   └── services.ts         # Catálogo de servicios y rutas de fotos
 ├── layouts/
-│   └── MainLayout.astro    # SEO head, nav, footer, WhatsApp flotante
-├── pages/                  # Rutas (/ , /servicios, /trabajos, /nosotros,
-│   │                       # /contacto, /blog, /404)
-├── styles/
-│   └── global.css          # Tailwind v4 topic + estilos base (mobile-first)
+│   └── MainLayout.astro    # SEO head, nav, footer, WhatsApp flotante y reveals
+├── pages/
+│   ├── index.astro
+│   ├── servicios/index.astro
+│   ├── servicios/[slug].astro
+│   ├── trabajos.astro
+│   ├── nosotros.astro
+│   ├── contacto.astro
+│   ├── blog/index.astro
+│   ├── 404.astro
+│   └── robots.txt.ts
+├── styles/global.css       # Tailwind v4, tokens y estilos base
 └── utils/
     ├── whatsapp.ts         # Enlaces y mensajes de WhatsApp
-    ├── seo.ts              # title/canonical + builders de JSON-LD
-    └── animation.ts        # Lazy loader de GSAP + reveal on scroll
+    ├── seo.ts              # Canonical, OG y constructores de JSON-LD
+    ├── links.ts            # withBase y comparación de rutas
+    └── animation.ts        # Carga diferida de GSAP y reveals
+
 public/
-├── favicon.png              # Favicon (símbolo del logo, fondo transparente)
-├── fonts/
-└── robots.txt
+├── favicon.png
+└── og-image.jpg
+
+docs/
+├── referencia-tarjeta-lignum.pdf
+├── CLIENT_DATA_REQUIRED.md
+├── IMAGE_AUDIT.md
+├── LIGHTHOUSE_AUDIT.md
+├── PROJECT_AUDIT_2026.md
+└── AUTOMATION_PLAN.md
+
+tests/
+└── lignum.spec.ts
 ```
 
-Nuevas páginas de servicio se agregarán en `src/pages/servicios/[slug].astro`
-(ver abajo "Agregar nuevos servicios").
+## Rutas y servicios
 
-## Cómo agregar nuevos servicios
+El sitio publica 12 rutas HTML más el endpoint dinámico `robots.txt`. Las cinco fichas activas viven en `/servicios/[slug]`:
 
-1. Agregar la entrada en `src/data/services.ts` (slug único, nombre, resumen,
-   icono de Lucide; `image`/`imageAlt` opcionales para la fotografía real del
-   servicio — sin foto se usa el placeholder).
-2. Cuando existan las páginas de detalle, crear
-   `src/pages/servicios/[slug].astro` leyendo el slug desde
-   `Astro.params` con `getServiceBySlug()`.
-3. La tarjeta `ServiceCard` usa `slug` para los anclajes de `#slug` en
-   `/servicios`.
+- `mantencion-de-areas-verdes-y-jardines`
+- `desmalezado`
+- `paisajismo`
+- `podas`
+- `tala-de-arboles`
 
-## Cómo agregar nuevas páginas
+Cada ficha usa `getStaticPaths()`, fotografías propias por catálogo y galería sin descripciones literales. `/blog` existe como placeholder editorial y no figura en la navegación.
 
-1. Crear el archivo en `src/pages/` (`.astro` o `.md`).
-2. Envolver el contenido en `MainLayout` con `title` (y `description`
-   cuando difiera del default).
-3. La ruta se genera automáticamente desde el nombre de archivo
-   (ver [routing en Astro](https://docs.astro.build/en/guides/routing/)).
+## Datos de la empresa
 
-## Cómo modificar los datos de la empresa
+La fuente única es `src/data/site.ts`:
 
-Todo se centraliza en `src/data/site.ts`:
+- Teléfono y WhatsApp: `+56 9 9582 0797`, dígitos `56995820797`.
+- Email: `lignum.ltda@gmail.com`.
+- Instagram: `https://www.instagram.com/lignum_ltda`.
+- Cobertura: Región Metropolitana y sus alrededores.
+- Horario: Lunes a Domingo, 08:00 a 19:00.
+- Dominio: `https://www.tudominio.cl`, provisional hasta comprar el `.cl` definitivo.
 
-- nombre, teléfono, WhatsApp, email, Instagram
-- zonas de cobertura, horarios
-- logo, colores, dominio (`url`)
+El dominio alimenta canonical, Open Graph, sitemap y JSON-LD. Los tokens de Tailwind v4 se definen en `src/styles/global.css` y deben sincronizarse con `colors` de `site.ts`.
 
-Cambiar los valores PLACEHOLDER. El **dominio** también alimenta el
-canonical, el sitemap (`@astrojs/sitemap`) y el JSON-LD.
-Los tokens de color de Tailwind v4 se definen en
-`src/styles/global.css` (`@theme`) y deben sincronizarse con
-`colors` de `site.ts`.
+## WhatsApp
 
-## Cómo configurar WhatsApp
+`src/data/site.ts` define el número confirmado. Todo lo demás usa `generateWhatsAppLink()` de `src/utils/whatsapp.ts`: botón flotante, Navbar, Footer, FinalCTA, `/contacto`, fichas de servicio y `QuoteForm`. Los enlaces `tel:` derivan de `SITE.phone`.
 
-1. Reemplazar `whatsappNumber` en `src/data/site.ts` por el número real en
-   formato internacional (solo dígitos, ej: `56912345678`).
-2. Todo lo demás (botón flotante, CTAs, formulario de cotización) usa la
-   función `generateWhatsAppLink()` de `src/utils/whatsapp.ts`.
+## Base path y deploy
 
-## Cómo preparar el deploy
+Mientras no se compre el dominio, mantener `BASE_PATH: /Lignum` en `astro.config.ts` y en los workflows. Tras comprar el dominio, decidir si el sitio se publica en raíz con `base: '/'` o conserva `/Lignum`, y actualizar `SITE.url`, `astro.config.ts` y `.github/workflows/deploy.yml`.
 
-1. Reemplazar `SITE.url` por el dominio real.
-2. Reemplazar todos los PLACEHOLDER (datos, logo, favicon, robots.txt).
-3. `npm run build` y servir `dist/` en cualquier host estático
-   (Netlify, Vercel, Cloudflare Pages, GitHub Pages, hosting con Nginx...).
-4. El sitemap se genera en `dist/sitemap-index.xml`; verificar robots.txt.
+Antes de publicar: `npm run format:check`, `npm run lint`, `npm run check`, `npm run build` y `npm test -- --reporter=line`.
 
 ## Referencias
 
-- Docs Astro: https://docs.astro.build
+- Documentación de Astro: https://docs.astro.build
 - Rutas dinámicas: https://docs.astro.build/en/core-concepts/routing/
 - Componentes: https://docs.astro.build/en/basics/astro-components/

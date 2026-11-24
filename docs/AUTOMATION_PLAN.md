@@ -1,92 +1,96 @@
-# AUTOMATION_PLAN.md — Plan de validaciones (Fase 5)
+# AUTOMATION_PLAN.md: automatización vigente de Lignum
 
-> No se instalaron dependencias ni se modificaron scripts en esta fase.
-> Todo lo propuesto usa lo ya presente en `package.json` o Node/Astro.
-> Estado: **plan**. Ninguna comprobación de esta lista se ha integrado todavía en CI.
+> Estado vigente: 2026-11-23.
+> Este archivo describe la automatización real del repositorio. Los documentos históricos conservan planes antiguos solo como registro.
+> El Hero está aprobado y no debe modificarse.
 
-## 1. Inventario actual
+## Objetivo
 
-Scripts existentes (`package.json:8-18`):
+Mantener el sitio estático de Lignum libre de enlaces rotos, placeholders de contacto, regresiones visuales y fallos de accesibilidad antes de cada deploy.
 
-| Script                    | Comando                                     | Uso en el plan        |
-| ------------------------- | ------------------------------------------- | --------------------- |
-| `format` / `format:check` | `prettier --write .` / `prettier --check .` | Formato               |
-| `lint` / `lint:fix`       | `eslint . --max-warnings=0`                 | Calidad               |
-| `check`                   | `astro check`                               | Tipado `.astro` + TS  |
-| `build`                   | `astro build`                               | Build estático        |
-| `preview`                 | `astro preview`                             | Smoke test de `dist/` |
+## Fuente de verdad
 
-Dependencias disponibles: Astro 7, `@astrojs/check`, `@astrojs/sitemap`, ESLint 10 + `eslint-plugin-astro` + `typescript-eslint`, Prettier 3 + `prettier-plugin-astro`, Tailwind v4, GSAP y Lucide.
-No hay Playwright, axe, Lighthouse ni framework de tests. Workflow actual: `.github/workflows/deploy.yml` (solo build + deploy).
+| Dato o decisión                                           | Archivo                 |
+| --------------------------------------------------------- | ----------------------- |
+| Teléfono, WhatsApp, email, Instagram, cobertura y horario | `src/data/site.ts`      |
+| Enlaces y mensajes de WhatsApp                            | `src/utils/whatsapp.ts` |
+| Catálogo, fotos y galerías                                | `src/data/services.ts`  |
+| Base path y sitemap                                       | `astro.config.ts`       |
+| Canonical, OG y JSON-LD                                   | `src/utils/seo.ts`      |
+| Estilo visual aprobado                                    | `DESIGN.md`             |
+| Estado general                                            | `PROJECT_STATUS.md`     |
+| Validación E2E                                            | `tests/lignum.spec.ts`  |
 
-## 2. Validaciones prioritarias
+La automatización no debe inventar dominios, testimonios, cifras ni precios. El número confirmado es `+56 9 9582 0797`, con dígitos `56995820797`.
 
-### P0-1. Integridad del layout y del HTML generado
+## Etapa 0: chequeo local rápido
 
-- [ ] Verificar que `src/layouts/MainLayout.astro` no contenga bytes NUL y sea texto UTF-8 válido.
-- [ ] Verificar que cada HTML de `dist/` tenga `<html lang>`, `<head>`, `<title>`, `<meta charset>`, `<meta name="viewport">` y contenido principal.
-- [ ] Fallar el CI si algún HTML contiene el carácter NUL o si el tamaño es sospechosamente uniforme (~4 KB en todas las páginas).
-- Justificación: es el fallo crítico detectado en esta sesión; `npm run build` solo no lo detecta.
+Ejecutar antes de cualquier commit:
 
-### P0-2. Meta descriptions y placeholders
-
-- [ ] Recorrer `dist/**/*.html` y fallar si aparece `(PLACEHOLDER)` en `<title>`, `meta[name=description]`, `meta[property^=og:]`, `meta[name^=twitter:]` o JSON-LD.
-- [ ] Fallar si una página pública no tiene `<title>` no vacío.
-- [ ] Advertir (no fallar inicialmente) si una página no tiene meta description; es preferible a publicar un borrador.
-- [ ] Comprobar que `buildMetaDescription` sigue filtrando descripciones con marcador (`src/utils/seo.ts:38-41`).
-
-### P1-1. Enlaces internos y base path
-
-- [ ] Extraer `href` internos de `dist/**/*.html` y verificar que el archivo de destino existe en `dist/` (considerando `base: /Lignum`).
-- [ ] Verificar que los `href` del inicio, navbar y footer empiecen por `/Lignum/` en producción local con `BASE_PATH=/Lignum`.
-- [ ] Comprobar `dist/robots.txt` y `dist/sitemap-index.xml`: la URL del sitemap debe incluir `/Lignum/`.
-- [ ] Verificar que no haya `/fonts/...` absolutos en CSS generado sin el prefijo `/Lignum/` (`src/styles/global.css:9,17,25,33`).
-
-### P1-2. Imágenes y vídeos
-
-- [ ] Verificar que todo `src`/`srcset` local de `dist` resuelva a un archivo existente.
-- [ ] Verificar atributos `alt` en todas las imágenes decorativas y de contenido.
-- [ ] Comprobar `width`/`height` o `aspect-*` contenedor para evitar CLS.
-- [ ] Verificar que los pósters y MP4 referenciados por `VideoGallery` existan en `dist/_astro/`.
-- [ ] Advertir si `poda-tronco-ladera.mp4` supera un umbral acordado (hoy 20,93 MB).
-
-### P2-1. Calidad y tipos
-
-- [ ] `npm run format:check`
-- [ ] `npm run lint`
-- [ ] `npm run check`
-- [ ] `npm run build`
-- Nota: `lint` usa `--max-warnings=0`; la regla `astro/no-unused-css-selector: warn` puede hacerlo fallar. No se cambiará la configuración sin justificación.
-
-### P2-2. Accesibilidad básica (sin dependencias nuevas)
-
-- [ ] Comprobar en HTML generado: un solo `<h1>` por página, orden de encabezados razonable, `lang`, `alt`, botones con nombre accesible, enlaces con texto no vacío.
-- [ ] Verificar que el skip link apunte a un `id` existente (`#contenido`).
-- [ ] Verificar que los elementos interactivos del menú móvil conserven `aria-expanded`/`aria-controls`.
-- Nota: para auditoría completa (axe/Lighthouse) se requeriría nueva dependencia; no instalar sin autorización.
-
-### P2-3. Navegación responsive y Playwright
-
-- [ ] Si Playwright está disponible en el entorno de CI: recorrer las 6 rutas principales en viewport móvil (390×844) y escritorio (1280×800), comprobando que no haya errores de consola, que el menú móvil abra/cierre y que el CTA de WhatsApp tenga `href` válido.
-- [ ] Si no está disponible: documentar el blockage y mantener la comprobación manual como alternativa temporal. **No instalar Playwright sin autorización.**
-
-## 3. Propuesta de implementación (sin ejecutar aún)
-
-Cuando se autorice, implementar como un script de Node puro en `scripts/audit.mjs` (sin dependencias nuevas) y un workflow separado `validate.yml` que ejecute:
-
-```text
-npm ci
+```bash
 npm run format:check
 npm run lint
 npm run check
 npm run build
-node scripts/audit.mjs
+npm test -- --reporter=line
 ```
 
-El script `audit.mjs` implementaría los puntos P0-1, P0-2, P1-1, P1-2 y P2-2. Las comprobaciones de formato/lint/check/build ya existen y no requieren cambios de `package.json`: se invocarían directamente.
+`npm test` usa `playwright.config.ts`, que define tres proyectos: `chromium`, `firefox` y `webkit`. El `webServer` ejecuta `npm run preview -- --host 127.0.0.1 --port 4331` sobre `dist/`.
 
-## 4. Justificación de no cambios
+## Etapa 1: compilación
 
-- No se añaden dependencias: el entorno ya tiene Prettier, ESLint, Astro check y sitemap.
-- No se modifica `package.json`: los scripts actuales son suficientes para invocar el nuevo script de Node.
-- No se modifica `.github/workflows/deploy.yml`: se propone un workflow de validación independiente para no alterar el despliegue actual.
+`npm run build` valida que:
+
+- Todas las rutas estáticas y `robots.txt.ts` compilen con `BASE_PATH=/Lignum`.
+- Las cinco fichas de `/servicios/[slug]` generen sus páginas desde `getStaticPaths()`.
+- Las imágenes de `src/assets/` se optimicen sin errores.
+- `withBase()` mantenga los enlaces internos dentro de `/Lignum`.
+- El sitemap y los JSON-LD usen URLs base-aware.
+
+## Etapa 2: suite Playwright
+
+`tests/lignum.spec.ts` ejecuta 73 pruebas por navegador: 6 comprobaciones para cada una de las 12 rutas más una prueba específica de enlaces de fichas.
+
+Cobertura por ruta:
+
+1. Carga HTTP, título y metadatos Open Graph.
+2. Render del contenido principal.
+3. Enlaces internos y externos con base path.
+4. Enlaces `wa.me/56995820797` y `tel:+56995820797`, sin números provisionales.
+5. Imágenes y videos disponibles, con atributos de accesibilidad y atributos de media.
+6. Responsive en 390, 768 y 1440 píxeles, menú móvil y foco visible.
+7. Accesibilidad básica, icono de Instagram en Footer y región activa en `QuoteForm`.
+
+La plantilla residual `tests/example.spec.ts` fue eliminada y se quitó su `testIgnore` de `playwright.config.ts`.
+
+## Etapa 3: CI
+
+| Workflow               | Archivo                            | Función                                                                                                                                                      |
+| ---------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Playwright Tests       | `.github/workflows/playwright.yml` | Instala dependencias, instala los tres navegadores, compila y ejecuta `npm test` en push y PR a `main` o `master`. Sube `playwright-report/` como artefacto. |
+| Deploy to GitHub Pages | `.github/workflows/deploy.yml`     | Compila con `SITE_URL=https://777rt.github.io` y `BASE_PATH=/Lignum`, luego publica `dist/`.                                                                 |
+
+El deploy sigue siendo provisional hasta comprar el dominio `.cl` y decidir si `base` será `'/'` o `'/Lignum'`. Cuando eso ocurra, actualizar `src/data/site.ts`, `astro.config.ts` y `.github/workflows/deploy.yml` en conjunto.
+
+## Etapa 4: checklist antes de publicar
+
+- Sin formatos de prueba con bloques de ceros ni números provisionales en `src/` ni `tests/`.
+- Sin `placeholder` de contacto en el HTML compilado.
+- Todos los `wa.me` usan `56995820797` y llevan texto.
+- Todos los `tel:` usan `+56995820797`.
+- El Footer expone `Instagram de Lignum` como enlace accesible.
+- `QuoteForm` expone un mensaje con `role="status"` y `aria-live="polite"`.
+- El botón flotante de WhatsApp respeta `env(safe-area-inset-bottom)`.
+- El Hero conserva sus ondas verdes aprobadas y sus capas sin cambios.
+- `npm run format:check`, `npm run lint`, `npm run check`, `npm run build` y `npm test -- --reporter=line` pasan.
+- El dominio y la base path finales están decididos.
+
+## Mantenimiento
+
+Después de cambiar contacto, catálogo, rutas, imágenes o decisiones de base path:
+
+1. Actualizar la fuente de verdad correspondiente.
+2. Actualizar `README.md`, `CLAUDE.md`, `PROJECT_STATUS.md` y este archivo.
+3. Revisar `docs/CLIENT_DATA_REQUIRED.md` si el cambio depende del cliente.
+4. Ejecutar la Etapa 0.
+5. Hacer commit local con mensaje descriptivo. No hacer push ni deploy sin autorización explícita.

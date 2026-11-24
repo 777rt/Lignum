@@ -7,12 +7,12 @@ const baseURL = `http://${PREVIEW_HOST}:${PREVIEW_PORT}${BASE_PATH}`;
 
 export default defineConfig({
   testDir: './tests',
-  testIgnore: 'tests/example.spec.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   reporter: [['html', { open: 'never' }]],
+  timeout: 60_000,
   use: {
     baseURL,
     reducedMotion: 'reduce',

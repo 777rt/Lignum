@@ -2,7 +2,7 @@
  * Utilidades para generar enlaces y mensajes de WhatsApp.
  *
  * El número de WhatsApp proviene de SITE.whatsappNumber (src/data/site.ts).
- * Para activar el servicio basta con reemplazar el número provisional de `site.ts`.
+ * El número confirmado se define una sola vez y se propaga a todas las CTA.
  */
 
 import { SITE } from '@/data/site';
@@ -57,7 +57,7 @@ export function buildWhatsAppMessage({
 
 /**
  * Genera el enlace wa.me con el mensaje pre-cargado.
- * Usa el número de WhatsApp definido en src/data/site.ts (provisional).
+ * Usa el número de WhatsApp definido en src/data/site.ts.
  */
 export function generateWhatsAppLink(
   message: string = buildWhatsAppMessage(),

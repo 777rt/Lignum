@@ -6,6 +6,8 @@
 > Esta auditoría **no modificó código**. Únicamente crea este documento. Las correcciones posteriores (Fase 3) se registran al final.
 > Fuente visual de verdad: `DESIGN.md`. No se propone rediseño.
 
+**Estado vigente:** este documento es un snapshot histórico del 2026-11-20. Después se cargaron el teléfono y WhatsApp reales (`+56 9 9582 0797`), se movió el PDF de referencia a `docs/referencia-tarjeta-lignum.pdf`, se pulió el Footer con ícono de Instagram y mejor contraste, se ajustó el JSON-LD al base path y se actualizaron tests y documentación. Para el estado actual, leer `README.md`, `CLAUDE.md` y `PROJECT_STATUS.md`.
+
 ---
 
 ## 0. Estado Git y respaldo (Fase 0)
@@ -38,8 +40,9 @@
 
 ### P0-2. Datos comerciales ficticios llegan a la conversión y a JSON-LD
 
-- WhatsApp `56900000000` (`src/data/site.ts:86`) se usa en enlaces `wa.me` del botón flotante, navbar, footer, CTA final, contacto y formulario (`WhatsAppButton.astro:5,9`; `Navbar.astro:9,132`; `Footer.astro:9,94`; `FinalCTA.astro:8,33`; `contacto.astro:18,31,65`; `QuoteForm.astro:121,199-203`).
-- Teléfono `+56 9 0000 0000`, email `contacto@tudominio.cl`, Instagram `@tu-usuario-instagram`, horarios y zonas son provisionales (`src/data/site.ts:85-100`).
+- WhatsApp con número de prueba (`src/data/site.ts:86` en ese momento) se usaba en enlaces `wa.me` del botón flotante, navbar, footer, CTA final, contacto y formulario (`WhatsAppButton.astro:5,9`; `Navbar.astro:9,132`; `Footer.astro:9,94`; `FinalCTA.astro:8,33`; `contacto.astro:18,31,65`; `QuoteForm.astro:121,199-203`). Estado superado: el número confirmado es `56995820797`.
+
+- Teléfono de prueba, email `contacto@tudominio.cl`, Instagram `@tu-usuario-instagram`, horarios y zonas eran provisionales (`src/data/site.ts:85-100` en ese momento). Estado superado para teléfono, email e Instagram; dominio y base path siguen pendientes.
 - JSON-LD emite `telephone`, `email`, `addressLocality`, `areaServed` y `openingHoursSpecification` derivados de esos datos (`src/utils/seo.ts:57-64, 102-138`).
 - Dominio local por defecto `https://www.tudominio.cl` (`src/data/site.ts:77`) afecta canonical, Open Graph, sitemap y robots. En CI se sobrescribe con `SITE_URL=https://777rt.github.io` (`.github/workflows/deploy.yml:22`), por lo que el sitemap de producción apunta a GitHub Pages, no al dominio definitivo.
 - Bloqueante: publicar significaría enviar cotizaciones a un número inexistente. No se debe corregir inventando valores; ver `CLIENT_DATA_REQUIRED.md`.

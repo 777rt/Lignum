@@ -14,9 +14,9 @@ export type SiteConfig = {
   tagline: string;
   locale: string;
   currency: string;
-  /** Teléfono en formato internacional. PROVISIONAL: reemplazar tras la compra. */
+  /** Teléfono en formato internacional. Confirmado por el cliente. */
   phone: string;
-  /** WhatsApp en formato internacional (solo dígitos). PROVISIONAL: reemplazar tras la compra. */
+  /** WhatsApp en formato internacional (solo dígitos). Confirmado por el cliente. */
   whatsappNumber: string;
   instagram: string;
   instagramUrl: string;
@@ -61,8 +61,8 @@ export const SITE = {
   tagline: 'Construcción y mantención de espacios verdes.',
   locale: 'es-CL',
   currency: 'CLP',
-  phone: '+56 9 0000 0000', // PROVISIONAL: teléfono no comprado.
-  whatsappNumber: '56900000000', // PROVISIONAL: WhatsApp no comprado.
+  phone: '+56 9 9582 0797',
+  whatsappNumber: '56995820797',
   instagram: '@lignum_ltda',
   instagramUrl: 'https://www.instagram.com/lignum_ltda',
   email: 'lignum.ltda@gmail.com',

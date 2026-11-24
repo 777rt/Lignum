@@ -5,6 +5,8 @@
 > **Método:** inspección visual directa de cada fotografía y póster con herramienta de lectura de imágenes; vídeos revisados por metadatos de archivo y por los fotogramas de sus pósters + documentación previa en `PROJECT_STATUS.md` §12 (`ffprobe` no está disponible en este entorno, por lo que duraciones/codecs de vídeo no se re-verificaron en esta ronda).
 > **Estado del repositorio al auditar:** los activos ya usan nombres descriptivos (p. ej. `mantencion-cesped-cortacesped-piscina.jpeg`); no existe ningún archivo `WhatsApp Image…` en el árbol de trabajo.
 
+**Estado vigente:** este inventario es histórico. Hoy las fotos y los videos están organizados por catálogo en `src/assets/images/` y `src/assets/videos/`, con 34 imágenes web y 2 MP4. Las galerías activas son `Gallery.astro` y `VideoGallery.astro`, ya migradas a Astro y con contenedores `aspect-*`. El PDF de referencia se movió a `docs/referencia-tarjeta-lignum.pdf`. Para el estado actual, leer `PROJECT_STATUS.md`.
+
 ---
 
 ## 1. Inventario de activos

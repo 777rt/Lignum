@@ -47,6 +47,11 @@ export function buildCanonicalURL(path: string): string {
   return new URL(withBase(clean), SITE.url).toString();
 }
 
+/** URL absoluta de un asset interno, respetando el base path del sitio. */
+function buildAssetURL(path: string): string {
+  return new URL(withBase(path), SITE.url).toString();
+}
+
 /** Schema.org: Organización. */
 export function buildOrganizationSchema(): JsonLd {
   return {
@@ -54,8 +59,8 @@ export function buildOrganizationSchema(): JsonLd {
     '@type': 'Organization',
     name: SITE.name,
     legalName: SITE.legalName,
-    url: SITE.url,
-    logo: new URL(SITE.logo.path, SITE.url).toString(),
+    url: buildCanonicalURL('/'),
+    logo: buildAssetURL(SITE.logo.path),
     email: SITE.email,
     sameAs: [SITE.instagramUrl],
     contactPoint: {
@@ -74,7 +79,7 @@ export function buildWebSiteSchema(): JsonLd {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE.name,
-    url: SITE.url,
+    url: buildCanonicalURL('/'),
     inLanguage: SITE.locale,
   };
 }
@@ -122,13 +127,12 @@ export function buildLocalBusinessSchema(): JsonLd {
     '@type': ['LocalBusiness', 'ProfessionalService'],
     name: SITE.name,
     legalName: SITE.legalName,
-    image: new URL(SITE.logo.path, SITE.url).toString(),
-    url: SITE.url,
+    image: buildAssetURL(SITE.logo.path),
+    url: buildCanonicalURL('/'),
     telephone: SITE.phone,
     email: SITE.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Santiago',
       addressRegion: 'Región Metropolitana',
       addressCountry: 'CL',
     },
@@ -153,7 +157,7 @@ export function buildServiceSchema(service: Service): JsonLd {
       '@type': 'Organization',
       name: SITE.name,
       legalName: SITE.legalName,
-      url: SITE.url,
+      url: buildCanonicalURL('/'),
     },
     areaServed: {
       '@type': 'Place',

@@ -5,6 +5,8 @@
 **Registro:** Estándar, elegante y profesional  
 **Ruta:** B+E (Rediseño conservando arquitectura, cambio visual profundo)
 
+**Estado implementado:** Hero y Footer usan cuatro capas SVG verdes orgánicas aprobadas, sin degradados en esos bloques. El aspecto visual del Hero es definitivo y no debe modificarse. Las fotos reales están organizadas por catálogo en `src/assets/images/` y existen cinco fichas en `/servicios/[slug]`. El número de WhatsApp confirmado es `+56 9 9582 0797` y el dominio `.cl` sigue pendiente de compra.
+
 ## 1. Principios de diseño
 
 ### 1.1 Concepto central
@@ -321,7 +323,7 @@ Animar **solo transform y opacity**. Nunca top/left/width/height.
 **Regla crítica:** No agregar imágenes externas aleatorias.
 
 - **Estructura preparada.** Crear slots con `aria-hidden="true"`/placeholders deliberados fáciles de reemplazar (comentarios `<!-- TODO: imagen [uso], aspect-ratio -->`).
-- **Priorizar assets existentes.** Usar `public/` o `src/assets/` solo si existen y sirven. Actualmente no hay imágenes reales → no inventar URLs.
+- **Priorizar assets existentes.** Usar `public/` o `src/assets/` solo si existen y sirven. Las fotos reales están organizadas por catálogo en `src/assets/images/`; no inventar URLs.
 - **Composiciones resilientes.** Layout debe funcionar y mantener jerarquía **sin imágenes**. Los bloques con imagen deben tener fallback sólido (fondo con tinte `--color-surface-subtle` o degradado muy sutil monocromático).
 - **Aspect ratios definidos:** Hero 16:9/16:10, Servicios 4:5 o 16:9, Trabajos 4:3/16:9, Nosotros 1:1/16:9. Reservar espacio (`aspect-ratio`) para evitar CLS.
 - **Alt obligatorio.** Siempre descriptivo, semántico (SEO + a11y). Nunca decorativo genérico.
@@ -362,6 +364,8 @@ durations: 150ms (fast), 200–250ms (base), 300–400ms (medium), 500ms (slow)
 | **Parallax muy sutil** | Hero/imagen puntual      | GSAP ScrollTrigger scrub 0.5–0.8                 | **Máx. 1 instancia**. Solo si justificado.                          |
 | **Marquee**            | Única sección            | GSAP pin/loop sutil                              | **Máx. 1 por página**. Solo si aporta contenido.                    |
 | **Sticky-stack**       | Caso muy puntual         | GSAP ScrollTrigger (`start: "top top"`)          | Solo cuando narrativa lo exige. No por defecto.                     |
+
+**Implementación real:** hoy solo se usan reveals ligeros con GSAP cargado de forma diferida desde `src/utils/animation.ts`. No hay Motion, hydration, parallax, marquee ni sticky-stack en el sitio publicado. Las opciones de la tabla son referencia de diseño, no funcionalidad activa.
 
 ### 9.5 Reglas Motion
 
@@ -420,13 +424,13 @@ durations: 150ms (fast), 200–250ms (base), 300–400ms (medium), 500ms (slow)
 6. **Páginas restantes** → `/servicios`, `/nosotros`, `/trabajos`, `/contacto`, `/blog`, `/404`. Coherencia total.
 7. **Motion** → `src/utils/animation.ts` (GSAP + reduced motion). Añadir reveals puntuales con propósito.
 8. **Revisión + polish** → Segunda pasada (impeccable/review-animations/improve-animations).
-9. **Verificación** → `astro check`, `astro build`, `prettier --check`, lint. Desktop+mobile.
+9. **Verificación** → `npm run format:check`, `npm run lint`, `npm run check`, `npm run build` y `npm test -- --reporter=line` en Chromium, Firefox y WebKit. Desktop y mobile.
 
 ### 11.2 Reglas de implementación (críticas)
 
 - **Conservar arquitectura.** No reconstruir desde cero. Reutilizar componentes útiles.
-- **No inventar datos.** PLACEHOLDERs se mantienen sin rellenar con info falsa (teléfono, WhatsApp, email, dirección, zonas, clientes, testimonios, años, estadísticas, certificaciones).
-- **Diseñar alrededor de PLACEHOLDERs.** Componentes flexibles, slots preparados, composición no depende de datos inventados.
+- **No inventar datos.** Teléfono, WhatsApp, email, Instagram, cobertura y horario están confirmados. Siguen pendientes el dominio `.cl`, la decisión de `base` y los testimonios verificados cuando existan. No se inventan cifras, precios ni citas.
+- **Diseñar alrededor de datos confirmados.** Componentes flexibles, slots honestos y composición que no dependa de información inventada.
 - **Sin imágenes externas aleatorias.** Estructura preparada + fallbacks sólidos.
 - **Un sistema por proyecto.** Coherencia total entre páginas.
 - **Zigzag ≤ 2 consecutivos.** Variar familias layout. Eyebrows ≤1 cada 3 secciones.
@@ -435,7 +439,7 @@ durations: 150ms (fast), 200–250ms (base), 300–400ms (medium), 500ms (slow)
 ### 11.3 Notas anti-"look de IA"
 
 - Cero guiones largos (em-dash/en-dash) en UI visible.
-- Evitar gradientes genéricos, 3 tarjetas idénticas, glassmorphism por defecto, purple glow.
+- Evitar gradientes genéricos, 3 tarjetas idénticas, glassmorphism por defecto, purple glow. Las ondas verdes del Hero y del Footer están aprobadas y se conservan sin cambios.
 - Paleta rotada (evitar familia beige+brass por defecto).
 - Serif no por defecto. Énfasis con italic/bold misma familia.
 - Sin eyebrow en todas las secciones. Sin split-header por defecto.

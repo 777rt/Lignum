@@ -56,7 +56,7 @@ const isActiveLink = (href: string): boolean =>
       href={withBase('/')}
       data-brand
       class="flex shrink-0 items-center gap-2.5"
-      aria-label={`Ir al inicio — ${SITE.brandLabel}`}
+      aria-label={`Ir al inicio, ${SITE.brandLabel}`}
     >
       <Image
         src={logoSymbol}
@@ -144,12 +144,15 @@ const isActiveLink = (href: string): boolean =>
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          class="hover:text-stone-900"
+          class="hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive-500"
         >
           WhatsApp
         </a>
         {' · '}
-        <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} class="hover:text-stone-900">
+        <a
+          href={`tel:${SITE.phone.replace(/\s/g, '')}`}
+          class="hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive-500"
+        >
           {SITE.phone}
         </a>
       </p>

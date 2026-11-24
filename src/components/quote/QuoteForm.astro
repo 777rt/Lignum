@@ -19,6 +19,13 @@ const zonas = [SITE.coverage];
   <p class="mt-2 text-sm text-stone-600">
     Completa los datos y continuaremos por WhatsApp con el mensaje listo.
   </p>
+  <p
+    id="cot-estado"
+    class="mt-4 text-sm font-medium text-danger empty:mt-0"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  ></p>
 
   <div class="mt-7 grid gap-5 sm:grid-cols-2">
     <div class="sm:col-span-2">
@@ -124,6 +131,7 @@ const zonas = [SITE.coverage];
 
   if (formulario) {
     const errores = new Map<string, string>();
+    const estado = formulario.querySelector<HTMLElement>('#cot-estado');
 
     const marcarError = (id: string, mensaje: string): void => {
       const campo = formulario.querySelector<HTMLElement>(`#${id}`);
@@ -151,10 +159,12 @@ const zonas = [SITE.coverage];
         campo.addEventListener('input', () => {
           errores.delete(campo.id);
           limpiarError(campo.id);
+          if (estado) estado.textContent = '';
         });
         campo.addEventListener('change', () => {
           errores.delete(campo.id);
           limpiarError(campo.id);
+          if (estado) estado.textContent = '';
         });
       });
 
@@ -177,6 +187,7 @@ const zonas = [SITE.coverage];
       }
 
       if (errores.size > 0) {
+        if (estado) estado.textContent = 'Revisa los campos marcados.';
         const primerError = errores.keys().next().value;
         if (primerError) {
           formulario.querySelector<HTMLElement>(`#${primerError}`)?.focus();
@@ -196,6 +207,7 @@ const zonas = [SITE.coverage];
         lineas.push('', `Teléfono: ${telefono}`);
       }
 
+      if (estado) estado.textContent = 'Abriendo WhatsApp con tu mensaje listo.';
       void window.open(
         generateWhatsAppLink(lineas.join('\n').trim()),
         '_blank',

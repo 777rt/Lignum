@@ -1,7 +1,9 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
 const BASE_PATH = '/Lignum';
-const PLACEHOLDER_WHATSAPP = '56900000000';
+const WHATSAPP_NUMBER = '56995820797';
+const PHONE_LABEL = '+56 9 9582 0797';
+const PHONE_HREF = 'tel:+56995820797';
 
 const SERVICE_SLUGS = [
   'mantencion-de-areas-verdes-y-jardines',
@@ -187,35 +189,36 @@ for (const route of ROUTES) {
         const parsed = new URL(url);
         expect(parsed.protocol).toBe('https:');
         expect(parsed.hostname).toBe('wa.me');
-        expect(parsed.pathname).toMatch(/^\/\d{8,15}\/?$/);
+        expect(parsed.pathname).toBe(`/${WHATSAPP_NUMBER}`);
         expect((parsed.searchParams.get('text') ?? '').trim().length).toBeGreaterThan(0);
-
-        if (parsed.pathname.replace(/^\/|\/$/g, '') === PLACEHOLDER_WHATSAPP) {
-          test.info().annotations.push({
-            type: 'whatsapp-number-placeholder',
-            description: `${route.path}: wa.me usa el número provisional ${PLACEHOLDER_WHATSAPP}; requiere número real antes de publicar.`,
-          });
-        }
       }
+
+      const phoneLinks = hrefs.filter((href) => href.startsWith('tel:'));
+      expect(phoneLinks.length).toBeGreaterThan(0);
+      for (const href of new Set(phoneLinks)) {
+        expect(href).toBe(PHONE_HREF);
+      }
+      await expect(page.locator(`a[href="${PHONE_HREF}"]:visible`).first()).toBeVisible();
+      expect(await page.getByText(PHONE_LABEL).count()).toBeGreaterThan(0);
+
+      const content = await page.content();
+      expect(content).not.toMatch(/5690{8}/);
+      expect(content).not.toMatch(/\+56 9 0{4} 0{4}/);
     });
 
     test('imágenes y vídeos', async ({ page, request, baseURL }) => {
       await openRoute(page, route.path);
       await scrollThroughPage(page);
+      await page.locator('img[loading="lazy"]').evaluateAll((elements) => {
+        elements.forEach((element) => {
+          (element as HTMLImageElement).loading = 'eager';
+        });
+      });
       await page.waitForFunction(
         () =>
-          Array.from(document.images).every((image) => {
-            const style = getComputedStyle(image);
-            const rect = image.getBoundingClientRect();
-            const visible =
-              style.display !== 'none' &&
-              style.visibility !== 'hidden' &&
-              rect.width > 0 &&
-              rect.height > 0;
-            return !visible || image.complete || image.naturalWidth > 0;
-          }),
+          Array.from(document.images).every((image) => image.complete || image.naturalWidth > 0),
         null,
-        { timeout: 20_000 }
+        { timeout: 30_000 }
       );
 
       const images = await page.locator('img').evaluateAll((elements) =>
@@ -294,9 +297,48 @@ for (const route of ROUTES) {
 
     test('responsive', async ({ page }) => {
       await openRoute(page, route.path);
+      const isServiceDetail = /\/servicios\/[^/]+\/?$/.test(new URL(page.url()).pathname);
 
       for (const viewport of VIEWPORTS) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        const expectedMedia = {
+          width: viewport.width,
+          sm: viewport.width >= 640,
+          md: viewport.width >= 768,
+          lg: viewport.width >= 1024,
+        };
+        await page.waitForFunction(
+          (expected: { width: number; sm: boolean; md: boolean; lg: boolean }) =>
+            document.documentElement.clientWidth === expected.width &&
+            window.matchMedia('(min-width: 640px)').matches === expected.sm &&
+            window.matchMedia('(min-width: 768px)').matches === expected.md &&
+            window.matchMedia('(min-width: 1024px)').matches === expected.lg,
+          expectedMedia,
+          { timeout: 10_000 }
+        );
+
+        if (isServiceDetail) {
+          const expectedFontSize =
+            viewport.width >= 1024
+              ? 60
+              : viewport.width >= 768
+                ? 48
+                : viewport.width >= 640
+                  ? 36
+                  : 30;
+          await page.waitForFunction(
+            (expected: { width: number; fontSize: number }) => {
+              const heading = document.querySelector('main h1');
+              return (
+                document.documentElement.clientWidth === expected.width &&
+                !!heading &&
+                Math.round(parseFloat(getComputedStyle(heading).fontSize)) === expected.fontSize
+              );
+            },
+            { width: viewport.width, fontSize: expectedFontSize },
+            { timeout: 10_000 }
+          );
+        }
 
         await expect(page.locator('main#contenido')).toBeVisible();
         const overflow = await page.evaluate(() => ({
@@ -328,6 +370,10 @@ for (const route of ROUTES) {
         }
 
         await expect(page.getByRole('link', { name: /whatsapp/i }).first()).toBeVisible();
+        const floatingWhatsApp = page.getByRole('link', {
+          name: 'Solicitar cotización por WhatsApp',
+        });
+        await expect(floatingWhatsApp).toHaveClass(/safe-area-inset-bottom/);
       }
     });
 
@@ -360,6 +406,16 @@ for (const route of ROUTES) {
           .map((element) => (element as HTMLElement).outerHTML.slice(0, 120))
       );
       expect(unnamedControls, 'Controles sin nombre accesible').toEqual([]);
+
+      const instagram = page.getByRole('link', { name: 'Instagram de Lignum' });
+      await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/lignum_ltda');
+      await expect(instagram).toHaveAttribute('target', '_blank');
+      await expect(instagram).toHaveAttribute('rel', 'noopener noreferrer');
+
+      if (route.path === '/contacto') {
+        await expect(page.locator('#cot-estado')).toHaveAttribute('aria-live', 'polite');
+        await expect(page.locator('#cot-estado')).toHaveAttribute('role', 'status');
+      }
 
       const headingLevels = await page
         .locator('h1,h2,h3,h4,h5,h6')
