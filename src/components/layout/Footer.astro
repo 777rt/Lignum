@@ -17,40 +17,35 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
 ---
 
 <footer class="relative isolate overflow-hidden border-t border-olive-500/30 bg-forest-950 text-white">
-  {/* Motivo de capas orgánicas extraído de la segunda imagen del brief; adaptado a los tokens de Lignum. */}
+  {/* Ondas de relieve: cuatro franjas boscosas sin cortes en los bordes. */}
   <svg
-    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-64 w-full sm:h-80 lg:h-[26rem]"
+    class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-64 w-full sm:h-80 lg:h-[26rem]"
     viewBox="0 0 1440 420"
     preserveAspectRatio="none"
     aria-hidden="true"
     focusable="false"
   >
     <path
-      fill="var(--color-olive-500)"
-      opacity="0.22"
+      fill="var(--color-forest-700)"
+      opacity="0.38"
       d="M0 208C170 174 318 202 470 180c164-24 274-92 440-78 176 15 330 102 530 62v256H0Z"
     />
     <path
-      fill="var(--color-forest-700)"
-      opacity="0.62"
+      fill="var(--color-forest-800)"
+      opacity="0.72"
       d="M0 276c196-56 352-6 512-34 180-32 306-116 486-92 172 23 318 100 442 88v182H0Z"
     />
     <path
-      fill="var(--color-forest-800)"
-      opacity="0.82"
+      fill="var(--color-forest-900)"
       d="M0 336c188-44 344 16 530-16 178-31 316-90 478-68 164 22 304 78 432 70v98H0Z"
     />
     <path
-      fill="var(--color-forest-900)"
-      d="M0 380c210-34 374 24 566-8 176-29 322-66 484-46 158 20 282 54 390 48v46H0Z"
-    />
-    <path
       fill="var(--color-forest-950)"
-      d="M0 404c220-22 396 18 592-8 182-24 330-42 488-26 146 15 268 34 360 30v20H0Z"
+      d="M0 380c210-34 374 24 566-8 176-29 322-66 484-46 158 20 282 54 390 48v46H0Z"
     />
   </svg>
 
-  <div class="relative mx-auto max-w-[1400px] px-4 pt-14 pb-52 sm:px-6 md:pt-20 lg:px-8 lg:pb-64">
+  <div class="relative z-10 mx-auto max-w-[1400px] px-4 pt-14 pb-52 sm:px-6 md:pt-20 lg:px-8 lg:pb-64">
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
       <section aria-label="Marca Lignum" class="lg:col-span-5">
         <a
