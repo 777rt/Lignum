@@ -4,7 +4,7 @@ import Button from '@/components/ui/Button.astro';
 import { SERVICES } from '@/data/services';
 import { SITE } from '@/data/site';
 
-const zonas = SITE.zones;
+const zonas = [SITE.coverage];
 ---
 
 <form
@@ -17,7 +17,7 @@ const zonas = SITE.zones;
     Solicita tu cotización
   </h2>
   <p class="mt-2 text-sm text-stone-600">
-    Completa los datos y continuarás por WhatsApp con el mensaje listo. (PLACEHOLDER)
+    Completa los datos y continuaremos por WhatsApp con el mensaje listo.
   </p>
 
   <div class="mt-7 grid gap-5 sm:grid-cols-2">
@@ -75,7 +75,7 @@ const zonas = SITE.zones;
 
     <div class="sm:col-span-2">
       <label for="cot-comuna" class="field-label">
-        Comuna de Santiago
+        Comuna o zona
       </label>
       <input
         id="cot-comuna"
@@ -84,7 +84,7 @@ const zonas = SITE.zones;
         list="lista-comunas"
         autocomplete="address-level2"
         class="field-input"
-        placeholder="Ej: Ñuñoa"
+        placeholder="Ej: Región Metropolitana"
       />
       <datalist id="lista-comunas">
         {zonas.map((zona) => (

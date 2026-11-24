@@ -20,7 +20,7 @@ interface Props {
   description?: string;
   /** Ruta para la URL canónica (por defecto, la ruta actual). */
   canonicalPath?: string;
-  /** Imagen para Open Graph / Twitter. Debe ser una URL o ruta absoluta. */
+  /** Imagen para Open Graph / Twitter. URL absoluta o ruta interna. */
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
@@ -41,7 +41,7 @@ const {
 const fullTitle = estaPendiente(title) ? buildPageTitle(SITE.name) : buildPageTitle(title);
 const metaDescription = buildMetaDescription(description, SITE.description);
 const canonical = buildCanonicalURL(canonicalPath);
-const ogImage = image ? new URL(image, SITE.url).toString() : '';
+const ogImage = image ? new URL(withBase(image), SITE.url).toString() : '';
 ---
 
 <!doctype html>

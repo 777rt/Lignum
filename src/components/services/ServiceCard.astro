@@ -1,5 +1,6 @@
 ---
 import {
+  ArrowUpRight,
   Axe,
   Droplets,
   Hammer,
@@ -12,6 +13,7 @@ import {
   Trees,
 } from '@lucide/astro';
 import type { Service } from '@/data/services';
+import { withBase } from '@/utils/links';
 
 interface Props {
   service: Service;
@@ -39,6 +41,7 @@ const panelId = `${service.slug}-panel`;
 const triggerId = `${service.slug}-trigger`;
 /** El servicio principal (mantención) parte expandido: estado inicial del selector. */
 const abierto = service.mainService === true;
+const prioritaria = index === 1;
 ---
 
 <article
@@ -79,28 +82,26 @@ const abierto = service.mainService === true;
     <div data-service-panel-inner class="overflow-hidden">
       <div class="px-2 pb-8 md:px-4 md:pb-10 lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
         <div class="lg:col-span-7">
-          {service.image ? (
-            <img
-              src={service.image.src}
-              alt={service.imageAlt ?? ''}
-              width={service.image.width}
-              height={service.image.height}
-              loading="lazy"
-              decoding="async"
-              class="aspect-[16/10] w-full rounded-lg object-cover"
-            />
-          ) : (
-            /* TODO: fotografía real del servicio (service.image). Aspect 16/10. */
-            <div class="image-slot aspect-[16/10] rounded-lg" aria-hidden="true">
-              <span class="image-slot-label">
-                <Icon class="size-4" />
-                Fotografía del servicio
-              </span>
-            </div>
-          )}
+          <img
+            src={service.image.src}
+            alt={service.imageAlt}
+            width={service.image.width}
+            height={service.image.height}
+            loading={prioritaria ? 'eager' : 'lazy'}
+            fetchpriority={prioritaria ? 'high' : undefined}
+            decoding="async"
+            class="aspect-[16/10] w-full rounded-lg object-cover"
+          />
         </div>
         <div class="mt-6 lg:col-span-5 lg:mt-0">
           <p class="max-w-[52ch] text-lg text-stone-700">{service.shortDescription}</p>
+          <a
+            href={withBase(`/servicios/${service.slug}`)}
+            class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-forest-600 hover:text-forest-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
+          >
+            Ver ficha del servicio
+            <ArrowUpRight class="size-4" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </div>

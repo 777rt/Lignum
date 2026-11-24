@@ -40,7 +40,7 @@ const canales = [
     icon: AtSign,
     label: 'Instagram',
     valor: SITE.instagram,
-    href: 'https://instagram.com', // PLACEHOLDER: perfil real
+    href: SITE.instagramUrl,
   },
 ];
 ---
@@ -58,7 +58,7 @@ const canales = [
             Hablemos de tu jardín
           </h1>
           <p class="mt-5 max-w-[58ch] text-lg text-stone-700">
-            Cuéntanos qué necesitas y te responderemos a la brevedad por WhatsApp. (PLACEHOLDER)
+            Cuéntanos qué necesitas y te responderemos por WhatsApp con una cotización clara.
           </p>
         </div>
         <div class="lg:col-span-4 lg:col-start-9 lg:text-right">
@@ -66,7 +66,7 @@ const canales = [
             Solicitar cotización
           </Button>
           <p class="mt-3 text-xs text-stone-600">
-            Respuesta dentro del horario de atención. (PLACEHOLDER)
+            Respuesta dentro de nuestro horario de atención.
           </p>
         </div>
       </div>
@@ -108,16 +108,8 @@ const canales = [
             </h2>
             <dl class="mt-4 space-y-2 text-sm">
               <div class="flex justify-between gap-4">
-                <dt class="text-stone-600">Lunes a viernes</dt>
-                <dd class="font-medium text-stone-900">{SITE.hours.weekdays}</dd>
-              </div>
-              <div class="flex justify-between gap-4">
-                <dt class="text-stone-600">Sábado</dt>
-                <dd class="font-medium text-stone-900">{SITE.hours.saturday}</dd>
-              </div>
-              <div class="flex justify-between gap-4">
-                <dt class="text-stone-600">Domingo</dt>
-                <dd class="font-medium text-stone-900">{SITE.hours.sunday}</dd>
+                <dt class="text-stone-600">{SITE.hours.days}</dt>
+                <dd class="font-medium text-stone-900">{SITE.hours.range}</dd>
               </div>
             </dl>
           </div>
@@ -127,7 +119,7 @@ const canales = [
               <MapPin class="size-3.5 text-olive-500" aria-hidden="true" />
               Zonas de cobertura
             </h2>
-            <p class="mt-4 text-sm leading-relaxed text-stone-700">{SITE.zones.join(' · ')}</p>
+            <p class="mt-4 text-sm leading-relaxed text-stone-700">{SITE.coverage}</p>
           </div>
         </div>
 

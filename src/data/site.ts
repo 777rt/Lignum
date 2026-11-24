@@ -1,10 +1,3 @@
-/**
- * Configuración central del sitio.
- *
- * TODOS los campos marcados como PLACEHOLDER deben ser reemplazados
- * posteriormente con la información real de la empresa.
- */
-
 import logoSymbol from '@/assets/icons/logo-lignum-symbol.png';
 
 export type NavigationLink = {
@@ -13,44 +6,33 @@ export type NavigationLink = {
 };
 
 export type SiteConfig = {
-  /** Dominio real del sitio. PLACEHOLDER: reemplazar antes del deploy. */
+  /** Dominio real del sitio. PROVISIONAL: reemplazar tras la compra. */
   url: string;
-  /** Nombre de la marca que aparece en títulos y pie de página. */
   name: string;
-  /** Nombre legal de la empresa (para Schema.org). PLACEHOLDER. */
   legalName: string;
-  /** Descripción corta para meta description y Open Graph. PLACEHOLDER. */
   description: string;
-  /** Eslogan/lema provisional. PLACEHOLDER. */
   tagline: string;
   locale: string;
   currency: string;
-  /** Teléfono en formato internacional para mostrar. PLACEHOLDER. */
+  /** Teléfono en formato internacional. PROVISIONAL: reemplazar tras la compra. */
   phone: string;
-  /** Número de WhatsApp en formato internacional (solo dígitos). PLACEHOLDER. */
+  /** WhatsApp en formato internacional (solo dígitos). PROVISIONAL: reemplazar tras la compra. */
   whatsappNumber: string;
-  /** Usuario de Instagram. PLACEHOLDER. */
   instagram: string;
-  /** Email de contacto. PLACEHOLDER. */
+  instagramUrl: string;
   email: string;
-  /** Horarios de atención. PLACEHOLDER. */
   hours: {
-    weekdays: string;
-    saturday: string;
-    sunday: string;
+    days: string;
+    range: string;
   };
-  /** Zonas de cobertura (comunas de Santiago). PLACEHOLDER: completar. */
-  zones: string[];
-  /** Rutas principales del sitio. */
+  coverage: string;
   navigation: NavigationLink[];
-  /** Logo (símbolo, fondo transparente, derivado de iconlignum.jpg). */
   logo: {
     path: string;
     alt: string;
     width: number;
     height: number;
   };
-  /** Colores corporativos. PLACEHOLDER: definir con la identidad real. */
   colors: {
     primary: string;
     secondary: string;
@@ -58,55 +40,43 @@ export type SiteConfig = {
     background: string;
     text: string;
   };
-  /** Color para <meta name="theme-color">. */
   themeColor: string;
-  /** Imagen social por defecto (Open Graph / Twitter). PLACEHOLDER. */
   ogImage: string;
-  /** Nombre visual de la marca (aparece en la barra de navegación). */
   brandLabel: string;
 };
 
 /**
- * URL pública del sitio.
- *
- * En CI (GitHub Pages) se inyecta con la variable de entorno `SITE_URL`;
- * en local se usa el PLACEHOLDER. `process` solo se lee en tiempo de build,
- * por eso se protege con `typeof` (este módulo también llega al navegador).
+ * En CI (GitHub Pages) la URL se inyecta con `SITE_URL`; en local se usa la
+ * provisional. `process` solo se lee en tiempo de build y se protege con
+ * `typeof` porque este módulo también llega al navegador.
  */
 const envUrl = typeof process !== 'undefined' ? process.env.SITE_URL : undefined;
 
 export const SITE = {
-  url: envUrl ?? 'https://www.tudominio.cl', // PLACEHOLDER: dominio real
+  url: envUrl ?? 'https://www.tudominio.cl', // PROVISIONAL: dominio no comprado.
   name: 'Lignum',
-  legalName: 'Razón Social o Persona Natural (PLACEHOLDER)',
+  legalName: 'Construcción y Mantenciones de Espacios Verdes Limitada',
   description:
-    'Servicios profesionales de jardinería en Santiago de Chile. Mantención de jardines, poda, diseño y paisajismo. (PLACEHOLDER)',
-  tagline: 'Jardinería profesional en Santiago (PLACEHOLDER)',
+    'Construcción y mantención de áreas verdes en la Región Metropolitana y sus alrededores. Paisajismo, desmalezado, podas y tala de árboles con cotización clara.',
+  tagline: 'Construcción y mantención de espacios verdes.',
   locale: 'es-CL',
   currency: 'CLP',
-  phone: '+56 9 0000 0000', // PLACEHOLDER
-  whatsappNumber: '56900000000', // PLACEHOLDER: número real de WhatsApp
-  instagram: '@tu-usuario-instagram', // PLACEHOLDER
-  email: 'contacto@tudominio.cl', // PLACEHOLDER
+  phone: '+56 9 0000 0000', // PROVISIONAL: teléfono no comprado.
+  whatsappNumber: '56900000000', // PROVISIONAL: WhatsApp no comprado.
+  instagram: '@lignum_ltda',
+  instagramUrl: 'https://www.instagram.com/lignum_ltda',
+  email: 'lignum.ltda@gmail.com',
   hours: {
-    weekdays: '08:00 - 18:00', // PLACEHOLDER
-    saturday: '09:00 - 13:00', // PLACEHOLDER
-    sunday: 'Cerrado', // PLACEHOLDER
+    days: 'Lunes a Domingo',
+    range: '08:00 - 19:00',
   },
-  zones: [
-    'Santiago Centro', // PLACEHOLDER: ajustar comunas reales de cobertura
-    'Ñuñoa',
-    'Providencia',
-    'Las Condes',
-    'Vitacura',
-  ],
+  coverage: 'Región Metropolitana y sus alrededores',
   navigation: [
     { label: 'Inicio', href: '/' },
     { label: 'Servicios', href: '/servicios' },
     { label: 'Trabajos', href: '/trabajos' },
     { label: 'Nosotros', href: '/nosotros' },
     { label: 'Contacto', href: '/contacto' },
-    { label: 'Blog', href: '/blog' },
   ],
   logo: {
     path: logoSymbol.src,
@@ -122,6 +92,6 @@ export const SITE = {
     text: '#1A1916',
   },
   themeColor: '#162318',
-  ogImage: '', // PLACEHOLDER: ruta hacia la imagen social definitiva
+  ogImage: '/og-image.jpg',
   brandLabel: 'Lignum',
 } satisfies SiteConfig;

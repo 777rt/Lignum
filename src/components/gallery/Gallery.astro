@@ -21,6 +21,8 @@ export type GalleryItem = {
   category?: string;
   /** Proporción forzada; por defecto sigue el patrón cíclico. */
   ratio?: 'feature' | 'portrait' | 'wide';
+  /** Carga prioritaria para la primera imagen visible de la página. */
+  priority?: boolean;
 };
 
 interface Props {
@@ -60,7 +62,7 @@ const resolved = items.map((item, index) => {
     </div>
     <div class="lg:col-span-4 lg:col-start-9 lg:self-center">
       <p class="max-w-[40ch] text-sm leading-relaxed text-stone-600">
-        Espacio reservado para la fotografía profesional de los proyectos realizados. (PLACEHOLDER)
+        Espacio reservado para la fotografía de los proyectos realizados.
       </p>
     </div>
   </div>
@@ -74,7 +76,8 @@ const resolved = items.map((item, index) => {
               <img
                 src={item.src}
                 alt={item.alt}
-                loading="lazy"
+                loading={item.priority ? 'eager' : 'lazy'}
+                fetchpriority={item.priority ? 'high' : undefined}
                 decoding="async"
                 class="h-full w-full object-cover"
               />
@@ -86,7 +89,8 @@ const resolved = items.map((item, index) => {
                 sizes="(max-width: 1024px) 100vw, 66vw"
                 format="webp"
                 quality={80}
-                loading="lazy"
+                loading={item.priority ? 'eager' : 'lazy'}
+                fetchpriority={item.priority ? 'high' : undefined}
                 decoding="async"
                 class="h-full w-full object-cover"
               />

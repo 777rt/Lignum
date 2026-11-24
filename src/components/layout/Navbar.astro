@@ -5,10 +5,13 @@ import logoSymbol from '@/assets/icons/logo-lignum-symbol.png';
 import Button from '@/components/ui/Button.astro';
 import { SITE } from '@/data/site';
 import { generateWhatsAppLink } from '@/utils/whatsapp';
-import { isCurrentPath, withBase } from '@/utils/links';
+import { isCurrentPath, stripBase, withBase } from '@/utils/links';
 
 const { pathname } = Astro.url;
 const whatsappHref = generateWhatsAppLink();
+const isActiveLink = (href: string): boolean =>
+  isCurrentPath(pathname, href) ||
+  (href === '/servicios' && stripBase(pathname).startsWith('/servicios/'));
 ---
 
 <style>
@@ -73,7 +76,7 @@ const whatsappHref = generateWhatsAppLink();
 
     <ul class="hidden items-center gap-1 lg:flex">
       {SITE.navigation.map((link) => {
-        const isCurrent = isCurrentPath(pathname, link.href);
+        const isCurrent = isActiveLink(link.href);
         return (
           <li>
             <a
@@ -113,7 +116,7 @@ const whatsappHref = generateWhatsAppLink();
     <div class="border-t border-stone-200/70 bg-background px-4 pb-6 pt-2 sm:px-6">
       <ul>
         {SITE.navigation.map((link, index) => {
-          const isCurrent = isCurrentPath(pathname, link.href);
+          const isCurrent = isActiveLink(link.href);
           return (
             <li class="border-b border-stone-200/70 last:border-b-0">
               <a

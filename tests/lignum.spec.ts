@@ -3,9 +3,21 @@ import { expect, test, type Page, type Response } from '@playwright/test';
 const BASE_PATH = '/Lignum';
 const PLACEHOLDER_WHATSAPP = '56900000000';
 
+const SERVICE_SLUGS = [
+  'mantencion-de-areas-verdes-y-jardines',
+  'desmalezado',
+  'paisajismo',
+  'podas',
+  'tala-de-arboles',
+] as const;
+
 const ROUTES = [
   { path: '/', label: 'Inicio' },
   { path: '/servicios', label: 'Servicios' },
+  ...SERVICE_SLUGS.map((slug) => ({
+    path: `/servicios/${slug}`,
+    label: `Servicio ${slug}`,
+  })),
   { path: '/trabajos', label: 'Trabajos' },
   { path: '/nosotros', label: 'Nosotros' },
   { path: '/blog', label: 'Blog' },
@@ -100,6 +112,9 @@ for (const route of ROUTES) {
       const title = (await page.title()).trim();
       expect(title.length).toBeGreaterThan(0);
       expect(title).not.toContain('(PLACEHOLDER)');
+
+      const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content');
+      expect(ogImage, 'og:image debe usar el base path').toContain(`${BASE_PATH}/og-image.jpg`);
 
       const mainText = (await page.locator('main#contenido').innerText()).trim();
       expect(mainText.length).toBeGreaterThan(20);
@@ -300,7 +315,7 @@ for (const route of ROUTES) {
           await burger.click();
           await expect(page.locator('#menu-movil')).toBeVisible();
           await expect(page.locator('#menu-movil [data-menu-link]').first()).toBeVisible();
-          if (route.path !== '/404') {
+          if (route.path !== '/404' && route.path !== '/blog') {
             await expect(page.locator('#menu-movil [aria-current="page"]')).toHaveCount(1);
           }
           await page.keyboard.press('Escape');
@@ -356,3 +371,20 @@ for (const route of ROUTES) {
     });
   });
 }
+
+test.describe('Fichas de servicio', () => {
+  test('el índice y la home enlazan las cinco fichas', async ({ page }) => {
+    for (const path of ['/servicios', '/']) {
+      await openRoute(page, path);
+      const hrefs = await page
+        .locator('a[href]')
+        .evaluateAll((elements) => elements.map((element) => element.getAttribute('href') ?? ''));
+
+      for (const slug of SERVICE_SLUGS) {
+        expect(hrefs, `${path} debe enlazar /servicios/${slug}`).toContain(
+          `${BASE_PATH}/servicios/${slug}`
+        );
+      }
+    }
+  });
+});

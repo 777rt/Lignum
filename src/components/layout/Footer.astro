@@ -125,7 +125,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
 
           <li>
             <a
-              href="https://instagram.com"
+              href={SITE.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-2 text-white/75 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
@@ -138,7 +138,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
           <li class="flex items-start gap-2 text-white/55">
             <Clock class="mt-0.5 size-4 shrink-0 text-olive-300" aria-hidden="true" />
             <span>
-              {SITE.hours.weekdays} · {SITE.hours.saturday} · {SITE.hours.sunday}
+              {SITE.hours.days}: {SITE.hours.range}
             </span>
           </li>
         </ul>
@@ -152,7 +152,7 @@ const eslogan = estaConfirmado(SITE.tagline) ? SITE.tagline : '';
           {SERVICES.map((service) => (
             <li>
               <a
-                href={withBase(`/servicios#${service.slug}`)}
+                href={withBase(`/servicios/${service.slug}`)}
                 class="inline-flex items-center gap-2 py-1 text-sm text-white/65 transition-colors duration-fast ease-out-expo hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-300"
               >
                 <span class="size-1.5 shrink-0 rounded-full bg-olive-500" aria-hidden="true"></span>

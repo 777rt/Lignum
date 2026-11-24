@@ -6,6 +6,7 @@
  */
 
 import { SITE } from '@/data/site';
+import type { Service } from '@/data/services';
 import { withBase } from '@/utils/links';
 
 export type JsonLd = Record<string, unknown>;
@@ -52,8 +53,11 @@ export function buildOrganizationSchema(): JsonLd {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: SITE.name,
+    legalName: SITE.legalName,
     url: SITE.url,
     logo: new URL(SITE.logo.path, SITE.url).toString(),
+    email: SITE.email,
+    sameAs: [SITE.instagramUrl],
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: SITE.phone,
@@ -101,25 +105,23 @@ function parseHours(rango: string): [string, string] | null {
  */
 export function buildLocalBusinessSchema(): JsonLd {
   const horarios: Horario[] = [];
-  const tramos = [
-    {
-      dias: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      rango: SITE.hours.weekdays,
-    },
-    { dias: ['Saturday'], rango: SITE.hours.saturday },
-  ];
+  const horas = parseHours(SITE.hours.range);
 
-  for (const { dias, rango } of tramos) {
-    const horas = parseHours(rango);
-    if (!horas) continue;
+  if (horas) {
     const [opens, closes] = horas;
-    horarios.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: dias, opens, closes });
+    horarios.push({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens,
+      closes,
+    });
   }
 
   return {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'ProfessionalService'],
     name: SITE.name,
+    legalName: SITE.legalName,
     image: new URL(SITE.logo.path, SITE.url).toString(),
     url: SITE.url,
     telephone: SITE.phone,
@@ -130,11 +132,33 @@ export function buildLocalBusinessSchema(): JsonLd {
       addressRegion: 'Región Metropolitana',
       addressCountry: 'CL',
     },
-    areaServed: SITE.zones.map((zone) => ({
+    areaServed: {
       '@type': 'Place',
-      name: zone,
-    })),
+      name: SITE.coverage,
+    },
     openingHoursSpecification: horarios,
+  };
+}
+
+/** Schema.org: servicio individual. */
+export function buildServiceSchema(service: Service): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.name,
+    description: service.description,
+    serviceType: service.name,
+    url: buildCanonicalURL(`/servicios/${service.slug}`),
+    provider: {
+      '@type': 'Organization',
+      name: SITE.name,
+      legalName: SITE.legalName,
+      url: SITE.url,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: SITE.coverage,
+    },
   };
 }
 

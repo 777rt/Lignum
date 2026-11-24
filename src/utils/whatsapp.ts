@@ -2,7 +2,7 @@
  * Utilidades para generar enlaces y mensajes de WhatsApp.
  *
  * El número de WhatsApp proviene de SITE.whatsappNumber (src/data/site.ts).
- * Para activar el servicio basta con reemplazar el PLACEHOLDER del número.
+ * Para activar el servicio basta con reemplazar el número provisional de `site.ts`.
  */
 
 import { SITE } from '@/data/site';
@@ -34,7 +34,10 @@ export function buildWhatsAppMessage({
   comuna,
   descripcion,
 }: WhatsAppQuoteInput = {}): string {
-  const lines: string[] = ['Hola, quisiera solicitar una cotización.', ''];
+  const lines: string[] = [
+    'Hola, quisiera solicitar una cotización con Lignum. Necesito ayuda con un servicio en la Región Metropolitana.',
+    '',
+  ];
 
   if (servicio) {
     lines.push(`Servicio: ${servicio}`);
@@ -54,7 +57,7 @@ export function buildWhatsAppMessage({
 
 /**
  * Genera el enlace wa.me con el mensaje pre-cargado.
- * Usa el número de WhatsApp definido en src/data/site.ts (PLACEHOLDER).
+ * Usa el número de WhatsApp definido en src/data/site.ts (provisional).
  */
 export function generateWhatsAppLink(
   message: string = buildWhatsAppMessage(),
